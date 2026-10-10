@@ -25,6 +25,8 @@ jobs:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
       - run: git merge-base --is-ancestor HEAD origin/main
       - run: npm run release:check
+      - run: npm install --global @salesforce/cli@2.153.5
+      - run: npm run test:package:sf
       - run: npm pack --pack-destination /tmp
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:

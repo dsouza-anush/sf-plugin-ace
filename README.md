@@ -11,7 +11,7 @@ sf plugins install @anushdsouza/sf-plugin-ace@beta
 sf ace --help
 ```
 
-For a GitHub Release tarball, use `sf plugins install ./anushdsouza-sf-plugin-ace-0.1.0-beta.1.tgz`. To remove the installed plugin, use `sf plugins uninstall @anushdsouza/sf-plugin-ace`. Install a pinned version to roll back.
+For a GitHub Release tarball, use `sf plugins install "file:$PWD/anushdsouza-sf-plugin-ace-0.1.0-beta.1.tgz"`. To remove the installed plugin, use `sf plugins uninstall @anushdsouza/sf-plugin-ace`. Install a pinned version to roll back.
 
 ## Install from source
 
