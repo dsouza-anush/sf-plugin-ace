@@ -2,6 +2,18 @@
 
 An independent Salesforce CLI plugin (beta). It implements the 18 published Agent Configuration and Agentic Memory & Context operations as dedicated `sf ace` commands, plus offline schema discovery. It is not a Salesforce-published or signed plugin. See the release page for distribution status and the live-verification limitations.
 
+## Integration
+
+<table>
+  <tr>
+    <td align="center"><strong>ACE CLI plugin</strong><br><code>sf ace</code><br>Runs in Salesforce CLI</td>
+    <td align="center">→<br>Authenticated API requests</td>
+    <td align="center"><img src="https://www.salesforce.com/news/wp-content/uploads/sites/3/2021/05/Salesforce-logo.jpg" width="128" height="72" alt="Salesforce"><br>Agent Configuration API<br>Agentic Memory &amp; Context API</td>
+  </tr>
+</table>
+
+Salesforce is a trademark of Salesforce, Inc. The Salesforce logo is copyright Salesforce, Inc. It identifies the platform this independent plugin integrates with; it does not indicate sponsorship, certification, or endorsement. [Official logo source](https://www.salesforce.com/news/media-collection/company-logos-and-video/) · [Usage guidelines](https://www.salesforce.com/company/legal/intellectual-property/).
+
 ## Install
 
 Install from the npm beta channel:
