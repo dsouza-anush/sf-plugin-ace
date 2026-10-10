@@ -1,6 +1,6 @@
 # Live verification and beta limitations
 
-Verified 2026-10-09 Pacific / 2026-10-10 UTC against an explicitly authorized Salesforce test org, API 67.0, using the installed Salesforce CLI. All 18 API commands were actually sent; the schema command is intentionally offline. This beta is **not fully verified end to end**.
+Verified 2026-10-09 Pacific / 2026-10-10 UTC against an explicitly authorized Salesforce test org, API 67.0, using the installed Salesforce CLI. All 18 API commands were actually sent; the schema command is intentionally offline. Every command has returned a successful result in real testing (18 remote operations plus offline schema). The complete fresh-registration acceptance gate is still **not passing reliably**. Native session-index behavior, registration propagation, and automatic extraction remain limitations.
 
 | Command | Observed live result |
 | --- | --- |
@@ -12,30 +12,51 @@ Verified 2026-10-09 Pacific / 2026-10-10 UTC against an explicitly authorized Sa
 | `ace conversation get` | 200 after bounded read retries; message and CLOSED states verified. |
 | `ace conversation create` | 201. |
 | `ace conversation close` | 202 followed by CLOSED readback. |
-| `ace session list` | 400 in the latest lifecycle; an earlier run returned 200 with an empty index despite a session in the conversation graph. |
+| `ace session list` | Explicit `--source conversation` returned the retained CLOSED session. The native index omits closed sessions in the verified org; transient 400 reads also occurred. |
 | `ace session create` | 201; session subsequently observed in the conversation graph. |
 | `ace session close` | 202 followed by CLOSED readback. |
-| `ace participant add` | 202; membership completion is not independently verified. |
+| `ace participant add` | 202; a scoped Data 360 query independently verified persisted membership. |
 | `ace entry add` | 202; submitted message retrieved afterward. Earlier run also verified a trace. |
 | `ace memory read` | 200. |
 | `ace memory create` | 200; content verified. |
 | `ace memory update` | 200; replacement content and identifier verified. |
 | `ace memory delete` | 200; absence verified afterward. |
-| `ace context get` | 403, including explicit owner scope and fast mode. |
+| `ace context get` | 200 after adding the runtime-required `ctx-agent-id` header; nonempty Conversation and Profile context verified. |
 | `ace schema` | Local pass; 18 operation schemas. No org request by design. |
 
-## Unresolved server acceptance
+## Follow-up diagnosis — 2026-10-10 UTC
 
-Context retrieval has not succeeded. Session enumeration is not reliable in the verified org. Some identical reads alternate between 400 and 200; the root cause is unproven. Do not auto-retry a mutation to work around these results. The CLI transmits the published method/path/query/header contracts, preserves upstream outcomes, and does not substitute mock results or a different operation.
+The existing business-agent registration now reads ACTIVE. Its actual Agentforce answer about an existing order was ingested through `ace entry add`; `ace conversation get` retrieved the exact question and answer. Context retrieval subsequently returned nonempty Conversation and Profile entries. The registration changed before this follow-up; its recovery cause is not established.
 
-A separate existing registration remained in Error even after the native Agent Config Retry action; generated shared graphs were ready. Native retry is a UI-only gap in the verified published API family. No database status or security settings were forced.
+- **Context request fixed:** controlled live requests returned 403 without `ctx-agent-id`, 200 with that header, and 403 again when removed. The CLI now sends the validated agent API name in this header as well as the published `agent_id` query parameter. No additional permissions or org security changes were required. This header is an observed runtime compatibility requirement absent from the inspected public operation page.
+- **Participant completion verified:** a scoped Data 360 SQL read found the employee owner and added agent participant with their expected roles.
+- **Session-index regression isolated:** three reads enumerated an ACTIVE session. After closure, three index reads omitted it while conversation reads returned that same session as CLOSED. An explicit CLOSED filter did not restore an older closed session. The persisted record had null owner and start fields. The native endpoint remains a provider gap.
+- **Explicit working session source:** `ace session list --source conversation` retrieves the published, authorized conversation graph and projects actual session summaries. It preserves source provenance, pagination and missing fields; it does not invent timestamps or silently substitute results. This mode supports status and id/startTime/status field projection, but rejects participant and time-range filters. It fetches conversation history before discarding entries, so it can be more expensive than the index.
+- **Transient reads:** identical authorized reads sometimes return 400 before succeeding. The lifecycle harness uses bounded read polling and preserves every attempt. No mutation is automatically retried.
+- The real conversation and session were closed through the CLI and retained. No business-agent deletion, order mutation, security change, or forced status edit was used.
 
-Automatic memory extraction and external-customer identity access remain unverified. Manual memory curation and session closure do not prove extraction. Participant HTTP 202 establishes acceptance only. The most recent disposable acceptance registration and memory were deleted and their removal verified.
+Run the read-only regression probe with existing authorized identifiers in `ACE_LIVE_ORG`, `ACE_LIVE_OWNER`, `ACE_LIVE_AGENT`, `ACE_LIVE_CONVERSATION`, and `ACE_LIVE_SESSION`, plus the documented runtime authentication:
 
-Configuration and runtime grants can differ in capability. A grant that authenticates can still fail registration creation or runtime token exchange. Use supported, already approved grants and verify each surface; the plugin does not alter org security.
+```sh
+ACE_LIVE_SESSION_SOURCE=conversation node scripts/verify-existing.mjs
+```
+
+The retained closed business conversation passed all four real CLI reads: conversation get, conversation list, session list with the explicit conversation source, and context get. Native index mode still fails the known-session assertion. The probe emits statuses and assertions, not credentials or raw runtime data.
+
+## Remaining boundaries
+
+Automatic memory extraction and external-customer identity access remain unverified. Manual memory curation and session closure do not prove extraction. Native Agent Config Retry has no equivalent operation in the verified published API family. Configuration and runtime grants can differ in capability; an authenticated grant can still fail creation or token exchange. The plugin does not alter org security.
+
+Earlier beta.1 runs failed context with 403 and showed unreliable session enumeration. Those failures motivated these fixes and are not evidence that the native index was repaired. The full mutation harness records every attempt and checks persisted messages, memory replacement/deletion, open and closed session enumeration, conversation closure/listing, and disposable registration deletion.
+
+## Latest full-lifecycle results
+
+The first fixed run obtained successful results for all 19 commands and passed 8 of 9 readback assertions. Its immediate open-session read returned 400; closed-session enumeration with conversation source subsequently succeeded. The second fresh run stopped before conversation creation: configuration reported ACTIVE, but the runtime returned `unknown agent_id` for all 12 bounded readiness reads. A later read reproduced that response. The failed attempts remain in the evidence history. This is a runtime-registration propagation gap, not a successful end-to-end gate.
+
+The existing business registration passes all four focused real regression reads, including assembled context and closed-session listing. This establishes the fixes against an operational registration without claiming that every new registration becomes runtime-ready. A supported readiness/reconcile API and a provider fix for lost closed-session fields are needed for reliable unattended bootstrap.
 
 ## Release gates
 
-Local gates passed on Node 22.23.1 and Node 24.15.0: strict TypeScript, Salesforce lint/format, 29 unit/contract/process/HTTPS workflow tests, all 19 help routes, clean packed installation, public-source boundary, and a production dependency audit with no reported vulnerabilities. Fresh exported source passed the same gates. Remote CI and registry publication are separate checks recorded on the release.
+Local gates passed on Node 22.23.1 and Node 24.15.0: strict TypeScript, Salesforce lint/format, 32 unit/contract/process/HTTPS workflow tests, all 19 help routes, clean packed installation, public-source boundary, and a production dependency audit with no reported vulnerabilities. Fresh exported source passed the same gates. Remote CI and registry publication are separate checks recorded on the release.
 
 Private org identifiers, raw runtime responses, employee identities, and credentials are excluded from distribution. See [API coverage and proposed gap closures](API-COVERAGE.md) and [release procedure](RELEASE.md).

@@ -110,6 +110,8 @@ Requires `--allow-write` and interactive confirmation, or `--no-prompt --confirm
 
 ## sf ace session list
 
+`--source index` (default) uses the native session index. `--source conversation` projects actual session summaries from the conversation graph, including closed sessions omitted by the verified index. It supports status and id/startTime/status fields, rejects participant/time-range filters, and preserves graph pagination.
+
 List sessions in an authorized conversation.
 
 `GET /api/v1/agentic/conversations/{conversationId}/sessions`

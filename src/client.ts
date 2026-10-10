@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { SfError } from '@salesforce/core';
-import { bodies, type Operation } from './contracts.js';
+import { bodies, operationFor, type Operation } from './contracts.js';
 
 export type Values = Record<string, string | number | string[] | boolean | undefined>;
 export type Plan = {
@@ -13,6 +13,7 @@ export type Plan = {
   body?: unknown;
   target: string;
   fingerprint: string;
+  sessionProjection?: { status?: string; fields?: string[] };
 };
 export type Result = {
   operation: string;
@@ -21,6 +22,7 @@ export type Result = {
   data: unknown;
   continuation?: { command: string; flags: Values };
   warnings: string[];
+  source?: 'conversation';
 };
 export type Session = { origin: string; token: string };
 
@@ -80,6 +82,8 @@ export function planRequest(
     }
     if (parameter.location === 'header') headers[parameter.wire] = String(value);
   }
+  // Live runtime compatibility: context routing requires this header as well as the published query parameter.
+  if (operation.command === 'ace context get') headers['ctx-agent-id'] = String(values['agent-id']);
   if (operation.command === 'ace context get' && values['owner-id'] && !values['owner-type'])
     throw new SfError('Provide --owner-type with --owner-id.', 'MissingOwnerType');
   let parsedBody: unknown;
@@ -104,6 +108,73 @@ export function planRequest(
     target,
   };
   return { ...request, fingerprint: createHash('sha256').update(JSON.stringify(request)).digest('hex') };
+}
+
+export function planSessionProjection(values: Values, target: string, apiVersion = '68.0'): Plan {
+  for (const name of ['time-range', 'participant-id']) {
+    if (values[name] !== undefined)
+      throw new SfError(
+        `--${name} is not supported with --source conversation. Use --source index.`,
+        'UnsupportedProjectionFilter',
+      );
+  }
+  const fields = values.fields as string[] | undefined;
+  if (
+    fields &&
+    (!Array.isArray(fields) ||
+      fields.length === 0 ||
+      fields.some((field) => !['id', 'startTime', 'status'].includes(field)))
+  )
+    throw new SfError(
+      'Conversation source supports only id, startTime, and status fields.',
+      'UnsupportedProjectionField',
+    );
+  // Validate the original list inputs before selecting the supported graph route.
+  planRequest(operationFor('ace session list'), values, undefined, target, apiVersion);
+  const graph = planRequest(
+    operationFor('ace conversation get'),
+    { ...values, scope: 'all' },
+    undefined,
+    target,
+    apiVersion,
+  );
+  const plan = {
+    ...graph,
+    command: 'ace session list',
+    sessionProjection: {
+      ...(values.status !== undefined ? { status: String(values.status) } : {}),
+      ...(fields ? { fields } : {}),
+    },
+  };
+  return { ...plan, fingerprint: createHash('sha256').update(JSON.stringify(plan)).digest('hex') };
+}
+
+export function projectSessions(data: unknown, projection: NonNullable<Plan['sessionProjection']>): unknown {
+  if (!data || typeof data !== 'object' || !('sessions' in data) || !Array.isArray(data.sessions))
+    throw new SfError(
+      'Conversation response did not contain a session array; no session result was inferred.',
+      'InvalidSessionProjection',
+    );
+  const sessions = data.sessions
+    .map((session: unknown) => {
+      if (!session || typeof session !== 'object' || !('sessionId' in session) || typeof session.sessionId !== 'string')
+        throw new SfError('Conversation response contained an invalid session identifier.', 'InvalidSessionProjection');
+      const row: Record<string, unknown> = { id: session.sessionId };
+      for (const field of ['startTime', 'status'])
+        if (field in session) row[field] = (session as Record<string, unknown>)[field];
+      return row;
+    })
+    .filter((row) => projection.status === undefined || row.status === projection.status)
+    .map((row) =>
+      projection.fields
+        ? Object.fromEntries(projection.fields.filter((field) => field in row).map((field) => [field, row[field]]))
+        : row,
+    );
+  return {
+    ...('conversationId' in data ? { conversationId: data.conversationId } : {}),
+    sessions,
+    ...('nextPageToken' in data ? { nextPageToken: data.nextPageToken } : {}),
+  };
 }
 
 export function requireWriteApproval(plan: Plan, allow: boolean, confirmed: boolean): void {
@@ -212,6 +283,12 @@ export class AceTransport {
       );
     }
     const warnings: string[] = [];
+    if (plan.sessionProjection) {
+      data = projectSessions(data, plan.sessionProjection);
+      warnings.push(
+        'Session summaries are projected from the conversation API, not the session index. Missing fields remain absent. Pagination follows the conversation API.',
+      );
+    }
     if (response.status === 202)
       warnings.push('Accepted by Salesforce; asynchronous completion and memory extraction are not verified.');
     if (operation.command === 'ace agent create')
@@ -224,6 +301,7 @@ export class AceTransport {
       warnings.push('Updated memories may have new identifiers; use the returned identifiers.');
     const result: Result = {
       operation: plan.command,
+      ...(plan.sessionProjection ? { source: 'conversation' as const } : {}),
       httpStatus: response.status,
       state: response.status === 202 ? 'accepted' : 'responded',
       data,

@@ -7,6 +7,7 @@ import {
   AceTransport,
   origin,
   planRequest,
+  planSessionProjection,
   requireWriteApproval,
   type Plan,
   type Result,
@@ -29,6 +30,12 @@ export function flagsFor(command: string): Interfaces.FlagInput {
     flags['runtime-origin'] = Flags.string({
       summary: messages.getMessage('flags.runtime-origin'),
       env: 'ACE_RUNTIME_ORIGIN',
+    });
+  if (command === 'ace session list')
+    flags.source = Flags.string({
+      summary: messages.getMessage('flags.source'),
+      options: ['index', 'conversation'],
+      default: 'index',
     });
   if (operation.body)
     flags['body-file'] = Flags.string({ summary: messages.getMessage('flags.body-file'), required: true, char: 'f' });
@@ -83,7 +90,10 @@ export abstract class AceCommand extends SfCommand<Result | { state: 'planned'; 
     const body = flags['body-file'] ? await readBody(String(flags['body-file'])) : undefined;
     const values: Values = {};
     for (const parameter of operation.parameters) values[parameter.name] = flags[parameter.name] as Values[string];
-    const plan = planRequest(operation, values, body, target, apiVersion);
+    const plan =
+      command === 'ace session list' && flags.source === 'conversation'
+        ? planSessionProjection(values, target, apiVersion)
+        : planRequest(operation, values, body, target, apiVersion);
     if (flags['dry-run']) {
       const result = { state: 'planned' as const, plan };
       if (!this.jsonEnabled()) this.logJson(result);
@@ -121,6 +131,7 @@ export abstract class AceCommand extends SfCommand<Result | { state: 'planned'; 
     }
     const result = await transport.execute(plan, session, operation, values);
     if (result.continuation) {
+      if (plan.sessionProjection) result.continuation.flags.source = 'conversation';
       if (org) result.continuation.flags['target-org'] = org.getUsername();
       if (explicitOrigin) result.continuation.flags['runtime-origin'] = explicitOrigin;
       result.continuation.flags['api-version'] = apiVersion;

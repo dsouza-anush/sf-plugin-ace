@@ -64,3 +64,9 @@ Request support includes registration name/label/description/data space/profile 
 - Not claimed by these checks: live acceptance of every API, live customer identity access, extraction completion, org provisioning, npm publication, Salesforce signing/certification, or deployment of the docs app.
 
 Sources: [Connect Agent Configuration](https://developer.salesforce.com/docs/data/connectapi/references/spec#tag/Agent-Configuration), [runtime operations](https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-context-ref-home.html), [Data 360 token exchange](https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-quick-start.html), [registration lifecycle](https://developer.salesforce.com/docs/data/agentic-memory-context/guide/agentic-memory-agent-registration.html), [governance](https://developer.salesforce.com/docs/data/agentic-memory-context/guide/agentic-memory-governance.html), and the separately captured public runtime field tables in the ACE docs app.
+
+## Live compatibility additions
+
+Context requests include `ctx-agent-id` with the same validated API name as the published `agent_id` query parameter. A controlled live probe returned 403 without this header and 200 with it. This observed requirement is absent from the inspected public operation page.
+
+`ace session list --source conversation` explicitly reads the published conversation graph and projects real session summaries, including closed sessions omitted by the verified native index. It supports status and id/startTime/status fields, preserves missing fields and pagination, and rejects participant/time-range filters. It retrieves history before projecting summaries and can cost more than index reads. Default `--source index` preserves the native endpoint and its outcomes.

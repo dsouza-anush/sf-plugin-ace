@@ -19,6 +19,7 @@ const folder = mkdtempSync(join(tmpdir(), 'ace-live-'));
 const report = {
   startedAt: new Date().toISOString(),
   commands: {},
+  attempts: [],
   assertions: {},
   retained: {},
   automaticWriteRetries: 0,
@@ -34,6 +35,7 @@ const profile = [...common, '--profile-id', owner, '--profile-type', 'employee',
 const persist = () => writeFileSync(reportPath, JSON.stringify(report, null, 2) + '\n', { mode: 0o600 });
 function run(command, flags = [], body, execute = false) {
   const args = [...command.split(' '), ...flags, '--json'];
+  if (command === 'ace session list') args.push('--source', process.env.ACE_LIVE_SESSION_SOURCE ?? 'index');
   if (body) {
     const file = join(folder, `${randomUUID()}.json`);
     writeFileSync(file, JSON.stringify(body), { mode: 0o600 });
@@ -67,9 +69,11 @@ function run(command, flags = [], body, execute = false) {
     httpStatus: r.result?.httpStatus ?? (Number(r.message?.match(/HTTP (\d+)/)?.[1]) || undefined),
     error: r.name,
     state: r.result?.state,
-    actualNetworkRequest: command !== 'ace schema',
+    source: r.result?.source,
+    responseReceived: Boolean(r.result?.httpStatus || /HTTP \d+/.test(r.message ?? '')),
   };
   report.commands[command] = row;
+  report.attempts.push({ command, ...row });
   persist();
   console.log(JSON.stringify({ command, ...row }));
   return r;
@@ -157,7 +161,11 @@ try {
     JSON.stringify(d).includes(message),
   );
   report.assertions.messagePersisted = JSON.stringify(readback.result?.data).includes(message);
-  const listed = run('ace session list', [...conv, ...own]);
+  const listed = await poll(
+    'ace session list',
+    [...conv, ...own],
+    (d) => d.sessions?.some((s) => (s.id ?? s.sessionId) === session) === true,
+  );
   report.assertions.sessionEnumerated = JSON.stringify(listed.result?.data?.sessions ?? []).includes(session);
   run('ace context get', [...conv, ...own, '--mode', 'fast']);
   success(run('ace memory read', profile));
@@ -204,7 +212,14 @@ try {
   report.assertions.conversationClosed = closed.result?.data?.status === 'CLOSED';
   report.assertions.sessionClosed =
     closed.result?.data?.sessions?.some((s) => s.sessionId === session && s.status === 'CLOSED') ?? false;
-  run('ace conversation list', [...base, ...own]);
+  const closedIndex = run('ace session list', [...conv, ...own, '--status', 'CLOSED']);
+  report.assertions.closedSessionEnumerated =
+    closedIndex.status === 0 &&
+    closedIndex.result.data.sessions?.some((s) => (s.id ?? s.sessionId) === session) === true;
+  const conversationIndex = run('ace conversation list', [...base, ...own]);
+  report.assertions.conversationEnumerated =
+    conversationIndex.status === 0 &&
+    conversationIndex.result.data.conversations?.some((c) => (c.id ?? c.conversationId) === conversation) === true;
   success(run('ace agent delete', base, undefined, true));
   const remaining = run('ace agent list', common);
   report.assertions.agentDeleted = remaining.status === 0 && !JSON.stringify(remaining.result.data).includes(agent);
@@ -220,7 +235,7 @@ try {
   report.allCommandsSuccessful =
     Object.keys(report.commands).length === 19 && Object.values(report.commands).every((r) => r.exitStatus === 0);
   report.allAssertionsPassed =
-    Object.keys(report.assertions).length >= 6 && Object.values(report.assertions).every(Boolean);
+    Object.keys(report.assertions).length >= 9 && Object.values(report.assertions).every(Boolean);
   persist();
   if (!report.allCommandsSuccessful || !report.allAssertionsPassed) process.exitCode = 1;
   // Preserve receipts and uncertain resource identifiers; never silently clean up an uncertain write.

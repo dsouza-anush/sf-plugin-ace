@@ -111,6 +111,7 @@ for (const [command, method, path] of cases)
       if (command === 'ace context get') {
         assert.equal(url.searchParams.get('agent_id'), 'agent/one');
         assert.equal(init.headers.agent_id, undefined);
+        assert.equal(init.headers['ctx-agent-id'], 'agent/one');
         assert.equal(url.searchParams.get('token_budget'), '50');
       } else if (op.surface === 'runtime') assert.equal(init.headers.agent_id, 'agent/one');
       if (command.endsWith(' list') && op.surface === 'runtime') {

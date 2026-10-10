@@ -93,6 +93,7 @@ test(
             return reply(200, { memories: state.memories });
           }
           if (path.endsWith('/context')) {
+            if (req.headers['ctx-agent-id'] !== 'a') return reply(403, {});
             if (url.searchParams.get('agent_id') !== 'a') return reply(400, {});
             return reply(200, {
               context: { entries: state.entries, memories: state.memories },

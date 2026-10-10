@@ -2369,9 +2369,10 @@
       "aliasPermutations": [],
       "aliases": [],
       "args": {},
-      "description": "GET /api/v1/agentic/conversations/{conversationId}/sessions\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "description": "GET /api/v1/agentic/conversations/{conversationId}/sessions\n\nUse --source conversation to project session summaries from the governed conversation API when the session index omits closed sessions. The result identifies its source. This mode supports status and id/startTime/status field projection; time-range and participant-id filters are rejected. Missing fields remain absent.\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type individual --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type individual --json",
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type employee --source conversation --status CLOSED --json"
       ],
       "flags": {
         "agent-id": {
@@ -2470,6 +2471,18 @@
           "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
           "type": "option"
         },
+        "source": {
+          "default": "index",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "source",
+          "options": [
+            "index",
+            "conversation"
+          ],
+          "summary": "Session list source: native index, or summaries projected from the authorized conversation graph.",
+          "type": "option"
+        },
         "status": {
           "hasDynamicHelp": false,
           "multiple": false,
@@ -2530,5 +2543,5 @@
       "summary": "List sessions in an authorized conversation."
     }
   },
-  "version": "0.1.0-beta.1"
+  "version": "0.1.0-beta.2"
 }

@@ -66,3 +66,6 @@ Provide --target-org, configure a default org, or supply a runtime origin/token 
 Salesforce authentication could not be refreshed. Reauthorize the target org with Salesforce CLI.
 # confirm
 Execute %s against %s? Deletion is irreversible; asynchronous operations need read-back verification.
+
+# flags.source
+Session list source: native index, or summaries projected from the authorized conversation graph.
