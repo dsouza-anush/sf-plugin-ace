@@ -7,6 +7,7 @@ Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@anushdsouza/sf-plugin-ace', 'schema');
 
 export default class Schema extends SfCommand<Record<string, unknown>> {
+  public static readonly state = 'beta';
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');

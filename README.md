@@ -4,14 +4,14 @@ An independent Salesforce CLI plugin (beta). It implements the 18 published Agen
 
 ## Install
 
-From the npm beta channel once published:
+Install from the npm beta channel:
 
 ```bash
 sf plugins install @anushdsouza/sf-plugin-ace@beta
 sf ace --help
 ```
 
-For a GitHub Release tarball, use `sf plugins install "file:$PWD/anushdsouza-sf-plugin-ace-0.1.0-beta.2.tgz"`. To remove the installed plugin, use `sf plugins uninstall @anushdsouza/sf-plugin-ace`. Install a pinned version to roll back.
+For a GitHub Release tarball, use `sf plugins install "file:$PWD/anushdsouza-sf-plugin-ace-0.1.0-beta.3.tgz"`. To remove the installed plugin, use `sf plugins uninstall @anushdsouza/sf-plugin-ace`. Install a pinned version to roll back.
 
 ## Install from source
 
@@ -48,7 +48,7 @@ sf ace context get --target-org my-org \
   --agent-id example_agent --conversation-id CONVERSATION_ID --json
 ```
 
-Every command supports `--json` using Salesforce's normal `{status,result,warnings}` success envelope and nonzero error exits. `result` preserves `httpStatus`, `state`, the unmodified upstream JSON in `data`, and wrapper warnings. Success means a response was received; it is not a workflow-completion claim. A 202 is explicitly `state: accepted`.
+Every command supports `--json` using Salesforce's normal `{status,result,warnings}` success envelope and nonzero error exits. `result` preserves `httpStatus`, `state`, upstream JSON in `data` (or explicitly identified session summaries with `--source conversation`), and wrapper warnings. Success means a response was received; it is not a workflow-completion claim. A 202 is explicitly `state: accepted`.
 
 The three paginated conversation reads include `result.continuation` with the next command and the original filters, scope, target org, and cursor. Repeat that request while `nextPageToken` is nonempty. Each invocation reads one page; there is no unbounded auto-pagination. Agent lists expose the published `--limit`, `--offset`, `--filters`, and `--order-by` parameters. Memory pagination is not invented.
 
@@ -83,7 +83,7 @@ There are no automatic write retries. After a timeout, unreadable response, or u
 
 1. Have an administrator complete documented provisioning, data space, graph, permissions, and identity prerequisites. This plugin does not change org security.
 2. Inspect `ace agent list/get`. Prepare the registration JSON using `ace schema`, dry-run `ace agent create`, approve the plan, and submit it.
-3. Poll `ace agent get --agent-id NAME` until Salesforce reports `Active`; handle `Error` and impose a caller-controlled timeout. Additional graph availability must be checked separately.
+3. Poll `ace agent get --agent-id NAME` until Salesforce reports `Active`; handle `Error` and impose a caller-controlled timeout. Then require a successful authorized runtime read: CP has reported ACTIVE before the runtime recognizes the agent API name. Additional graph availability must be checked separately.
 4. Create a conversation and session using `ace conversation create` and `ace session create`, then add participants and messages/traces with `ace participant add` and `ace entry add`.
 5. Use `ace context get`, conversation/session reads, and `ace memory read` under the authorized identity.
 6. Close the session, independently read observable state, and inspect memories later. Do not assert extraction finished from the close response alone.

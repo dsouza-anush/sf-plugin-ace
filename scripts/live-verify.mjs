@@ -48,6 +48,7 @@ function run(command, flags = [], body, execute = false) {
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'pipe'],
         timeout: 45000,
+        maxBuffer: 16 * 1024 * 1024,
       });
     } catch (error) {
       raw = error.stdout;
@@ -136,7 +137,9 @@ try {
       true,
     ),
   );
-  run('ace participant add', sess, { participants: [{ id: agent, type: 'agent', role: 'participant' }] }, true);
+  success(
+    run('ace participant add', sess, { participants: [{ id: agent, type: 'agent', role: 'participant' }] }, true),
+  );
   success(
     run(
       'ace entry add',
@@ -157,17 +160,23 @@ try {
       true,
     ),
   );
-  const readback = await poll('ace conversation get', [...conv, ...own, '--scope', 'all'], (d) =>
-    JSON.stringify(d).includes(message),
-  );
-  report.assertions.messagePersisted = JSON.stringify(readback.result?.data).includes(message);
+  const hasMessage = (data) =>
+    data?.sessions?.some((s) => s.sessionId === session && s.entries?.some((e) => e.id === message)) === true;
+  const readback = await poll('ace conversation get', [...conv, ...own, '--scope', 'all'], hasMessage);
+  report.assertions.messagePersisted = readback.status === 0 && hasMessage(readback.result?.data);
   const listed = await poll(
     'ace session list',
     [...conv, ...own],
     (d) => d.sessions?.some((s) => (s.id ?? s.sessionId) === session) === true,
   );
-  report.assertions.sessionEnumerated = JSON.stringify(listed.result?.data?.sessions ?? []).includes(session);
-  run('ace context get', [...conv, ...own, '--mode', 'fast']);
+  report.assertions.sessionEnumerated =
+    listed.status === 0 && listed.result?.data?.sessions?.some((s) => (s.id ?? s.sessionId) === session) === true;
+  const context = run('ace context get', [...conv, ...own, '--mode', 'fast']);
+  report.assertions.contextAssembled =
+    context.status === 0 &&
+    typeof context.result?.data?.contextId === 'string' &&
+    Array.isArray(context.result?.data?.userContext) &&
+    context.result.data.userContext.length > 0;
   success(run('ace memory read', profile));
   const memory = success(
     run(
@@ -200,7 +209,9 @@ try {
   success(run('ace memory delete', profile, { memories: [{ memoryId: replacement }] }, true));
   const removed = run('ace memory read', profile);
   report.assertions.memoryDeleted =
-    removed.status === 0 && !removed.result.data.memories?.some((m) => m.memoryId === replacement);
+    removed.status === 0 &&
+    Array.isArray(removed.result?.data?.memories) &&
+    !removed.result.data.memories.some((m) => m.memoryId === replacement);
   if (report.assertions.memoryDeleted) delete report.retained.memoryId;
   success(run('ace session close', sess, undefined, true));
   success(run('ace conversation close', conv, undefined, true));
@@ -221,8 +232,14 @@ try {
     conversationIndex.status === 0 &&
     conversationIndex.result.data.conversations?.some((c) => (c.id ?? c.conversationId) === conversation) === true;
   success(run('ace agent delete', base, undefined, true));
-  const remaining = run('ace agent list', common);
-  report.assertions.agentDeleted = remaining.status === 0 && !JSON.stringify(remaining.result.data).includes(agent);
+  const remaining = run('ace agent list', [...common, '--limit', '200', '--offset', '0']);
+  const inventory = remaining.result?.data;
+  report.assertions.agentDeleted =
+    remaining.status === 0 &&
+    Array.isArray(inventory?.agents) &&
+    Number.isInteger(inventory.totalSize) &&
+    inventory.totalSize === inventory.agents.length &&
+    !inventory.agents.some((item) => item.name === agent);
   if (report.assertions.agentDeleted) {
     delete report.retained.agent;
     delete report.retained.conversation;
@@ -235,7 +252,7 @@ try {
   report.allCommandsSuccessful =
     Object.keys(report.commands).length === 19 && Object.values(report.commands).every((r) => r.exitStatus === 0);
   report.allAssertionsPassed =
-    Object.keys(report.assertions).length >= 9 && Object.values(report.assertions).every(Boolean);
+    Object.keys(report.assertions).length === 10 && Object.values(report.assertions).every(Boolean);
   persist();
   if (!report.allCommandsSuccessful || !report.allAssertionsPassed) process.exitCode = 1;
   // Preserve receipts and uncertain resource identifiers; never silently clean up an uncertain write.

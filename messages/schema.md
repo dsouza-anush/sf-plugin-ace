@@ -8,4 +8,4 @@ Lists the implemented published operations. JSON schemas describe structural inp
 # flags.command
 Space-separated ACE command name to describe.
 # note
-Independent private implementation. Operation presence is not live tenant verification. Body schemas are structural; conditional validation still applies when commands execute.
+Independent community plugin. Operation presence is not live tenant verification. Body schemas are structural; conditional validation still applies when commands execute.

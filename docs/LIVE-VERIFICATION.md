@@ -60,3 +60,13 @@ The existing business registration passes all four focused real regression reads
 Local gates passed on Node 22.23.1 and Node 24.15.0: strict TypeScript, Salesforce lint/format, 32 unit/contract/process/HTTPS workflow tests, all 19 help routes, clean packed installation, public-source boundary, and a production dependency audit with no reported vulnerabilities. Fresh exported source passed the same gates. Remote CI and registry publication are separate checks recorded on the release.
 
 Private org identifiers, raw runtime responses, employee identities, and credentials are excluded from distribution. See [API coverage and proposed gap closures](API-COVERAGE.md) and [release procedure](RELEASE.md).
+
+## Quality-review candidate — beta.3, October 10
+
+The beta.3 candidate preserves pagination timeouts, uses oclif beta markers and Salesforce message bundles for transport errors/warnings, and tightens verification assertions. Local validation now contains 33 tests. The unused help-overwriting scaffold generator was removed.
+
+The candidate was installed from its tarball into a separate Salesforce CLI plugin directory on macOS (CLI 2.144.6). All four existing-business-conversation reads returned 200 with passing assertions: conversation get/list, session list with conversation source, and nonempty context assembly. This is an existing-registration regression, not a full fresh bootstrap.
+
+The fresh-registration attempt created a disposable registration (201), then read it as ACTIVE (200). Runtime readiness did not pass: eleven bounded reads returned 400 and the final read returned 401. A subsequent token-exchange attempt followed by a read also returned 401. The run stopped before creating conversations, sessions, entries or memories; the registration was read before cleanup, deleted once (204), and absence verified against a complete registration listing. Failed readiness attempts remain in the private receipts. No existing business registration or org security setting was changed.
+
+The full 19-command gate is still not passing. Prior successful operations remain historical evidence, not substitutes for this failed gate. Automatic extraction, external-customer identity, native closed-session indexing, and reliable runtime provisioning remain release limits. HTTP 401 also requires checking grant validity and runtime authorization; this audit does not establish that every 400/401 has one server-side cause.

@@ -9,6 +9,8 @@ concurrency:
   cancel-in-progress: false
 jobs:
   validate:
+    # This private preparation copy must not publish release artifacts.
+    if: github.repository == 'dsouza-anush/sf-plugin-ace'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

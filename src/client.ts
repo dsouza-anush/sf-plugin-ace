@@ -1,6 +1,9 @@
 import { createHash } from 'node:crypto';
-import { SfError } from '@salesforce/core';
+import { Messages, SfError } from '@salesforce/core';
 import { bodies, operationFor, type Operation } from './contracts.js';
+
+Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
+const messages = Messages.loadMessages('@anushdsouza/sf-plugin-ace', 'client');
 
 export type Values = Record<string, string | number | string[] | boolean | undefined>;
 export type Plan = {
@@ -33,7 +36,7 @@ export function origin(value: string): string {
       throw new Error();
     return url.origin;
   } catch {
-    throw new SfError('Use a verified HTTPS origin without a path, credentials, query, or fragment.', 'InvalidOrigin');
+    throw new SfError(messages.getMessage('errors.origin'), 'InvalidOrigin');
   }
 }
 
@@ -45,14 +48,15 @@ export function planRequest(
   apiVersion = '68.0',
 ): Plan {
   if (!/^\d+\.0$/.test(apiVersion) || Number(apiVersion) < 66)
-    throw new SfError('Agent Configuration requires API version 66.0 or later.', 'InvalidApiVersion');
+    throw new SfError(messages.getMessage('errors.api-version'), 'InvalidApiVersion');
   let path = operation.path;
   const query: Array<[string, string]> = [];
   const headers: Record<string, string> = {};
   for (const parameter of operation.parameters) {
     const value = values[parameter.name];
     if (value === undefined) {
-      if (parameter.required) throw new SfError(`Provide --${parameter.name}.`, 'MissingParameter');
+      if (parameter.required)
+        throw new SfError(messages.getMessage('errors.required', [parameter.name]), 'MissingParameter');
       continue;
     }
     const items = Array.isArray(value) ? value : [value];
@@ -60,24 +64,24 @@ export function planRequest(
       items.length === 0 ||
       items.some((item) => typeof item === 'boolean' || !String(item).trim() || /[\r\n]/.test(String(item)))
     )
-      throw new SfError(`Invalid --${parameter.name}.`, 'InvalidParameter');
+      throw new SfError(messages.getMessage('errors.parameter', [parameter.name]), 'InvalidParameter');
     if (parameter.kind !== 'multiple' && items.length !== 1)
-      throw new SfError(`Provide one --${parameter.name}.`, 'InvalidParameter');
+      throw new SfError(messages.getMessage('errors.single', [parameter.name]), 'InvalidParameter');
     for (const item of items) {
       if (parameter.options && !parameter.options.includes(String(item)))
-        throw new SfError(`Invalid --${parameter.name}.`, 'InvalidParameter');
+        throw new SfError(messages.getMessage('errors.parameter', [parameter.name]), 'InvalidParameter');
       if (
         parameter.kind === 'integer' &&
         (!Number.isSafeInteger(item) ||
           Number(item) < (parameter.min ?? 0) ||
           Number(item) > (parameter.max ?? Number.MAX_SAFE_INTEGER))
       )
-        throw new SfError(`Invalid --${parameter.name} integer.`, 'InvalidParameter');
+        throw new SfError(messages.getMessage('errors.integer', [parameter.name]), 'InvalidParameter');
       if (parameter.location === 'query') query.push([parameter.wire, String(item)]);
     }
     if (parameter.location === 'path') {
       if (value === '.' || value === '..')
-        throw new SfError('Path identifiers cannot be dot segments.', 'InvalidParameter');
+        throw new SfError(messages.getMessage('errors.dot-segment'), 'InvalidParameter');
       path = path.replace(`{${parameter.wire}}`, encodeURIComponent(String(value)));
     }
     if (parameter.location === 'header') headers[parameter.wire] = String(value);
@@ -85,17 +89,19 @@ export function planRequest(
   // Live runtime compatibility: context routing requires this header as well as the published query parameter.
   if (operation.command === 'ace context get') headers['ctx-agent-id'] = String(values['agent-id']);
   if (operation.command === 'ace context get' && values['owner-id'] && !values['owner-type'])
-    throw new SfError('Provide --owner-type with --owner-id.', 'MissingOwnerType');
+    throw new SfError(messages.getMessage('errors.owner-type'), 'MissingOwnerType');
   let parsedBody: unknown;
   if (operation.body) {
     const parsed = bodies[operation.body].safeParse(body);
     if (!parsed.success)
       throw new SfError(
-        `Invalid request body: ${parsed.error.issues.map((issue) => `${issue.path.join('.') || 'body'}: ${issue.code}`).join('; ')}. See command help and the API reference.`,
+        messages.getMessage('errors.body', [
+          parsed.error.issues.map((issue) => `${issue.path.join('.') || 'body'}: ${issue.code}`).join('; '),
+        ]),
         'InvalidBody',
       );
     parsedBody = parsed.data;
-  } else if (body !== undefined) throw new SfError('This operation does not accept a body.', 'UnexpectedBody');
+  } else if (body !== undefined) throw new SfError(messages.getMessage('errors.unexpected-body'), 'UnexpectedBody');
   const base = operation.surface === 'configuration' ? `/services/data/v${apiVersion}/ssot/agentic` : '/api/v1/agentic';
   const request = {
     command: operation.command,
@@ -113,10 +119,7 @@ export function planRequest(
 export function planSessionProjection(values: Values, target: string, apiVersion = '68.0'): Plan {
   for (const name of ['time-range', 'participant-id']) {
     if (values[name] !== undefined)
-      throw new SfError(
-        `--${name} is not supported with --source conversation. Use --source index.`,
-        'UnsupportedProjectionFilter',
-      );
+      throw new SfError(messages.getMessage('errors.projection-filter', [name]), 'UnsupportedProjectionFilter');
   }
   const fields = values.fields as string[] | undefined;
   if (
@@ -125,10 +128,7 @@ export function planSessionProjection(values: Values, target: string, apiVersion
       fields.length === 0 ||
       fields.some((field) => !['id', 'startTime', 'status'].includes(field)))
   )
-    throw new SfError(
-      'Conversation source supports only id, startTime, and status fields.',
-      'UnsupportedProjectionField',
-    );
+    throw new SfError(messages.getMessage('errors.projection-field'), 'UnsupportedProjectionField');
   // Validate the original list inputs before selecting the supported graph route.
   planRequest(operationFor('ace session list'), values, undefined, target, apiVersion);
   const graph = planRequest(
@@ -151,14 +151,11 @@ export function planSessionProjection(values: Values, target: string, apiVersion
 
 export function projectSessions(data: unknown, projection: NonNullable<Plan['sessionProjection']>): unknown {
   if (!data || typeof data !== 'object' || !('sessions' in data) || !Array.isArray(data.sessions))
-    throw new SfError(
-      'Conversation response did not contain a session array; no session result was inferred.',
-      'InvalidSessionProjection',
-    );
+    throw new SfError(messages.getMessage('errors.projection-array'), 'InvalidSessionProjection');
   const sessions = data.sessions
     .map((session: unknown) => {
       if (!session || typeof session !== 'object' || !('sessionId' in session) || typeof session.sessionId !== 'string')
-        throw new SfError('Conversation response contained an invalid session identifier.', 'InvalidSessionProjection');
+        throw new SfError(messages.getMessage('errors.projection-id'), 'InvalidSessionProjection');
       const row: Record<string, unknown> = { id: session.sessionId };
       for (const field of ['startTime', 'status'])
         if (field in session) row[field] = (session as Record<string, unknown>)[field];
@@ -179,13 +176,8 @@ export function projectSessions(data: unknown, projection: NonNullable<Plan['ses
 
 export function requireWriteApproval(plan: Plan, allow: boolean, confirmed: boolean): void {
   if (plan.method === 'GET') return;
-  if (!allow)
-    throw new SfError('Writes are disabled. Review --dry-run, then explicitly pass --allow-write.', 'WritesDisabled');
-  if (!confirmed)
-    throw new SfError(
-      'Write not confirmed. For automation, pass --no-prompt --confirm with the fingerprint from --dry-run.',
-      'ConfirmationRequired',
-    );
+  if (!allow) throw new SfError(messages.getMessage('errors.writes-disabled'), 'WritesDisabled');
+  if (!confirmed) throw new SfError(messages.getMessage('errors.confirmation'), 'ConfirmationRequired');
 }
 
 export class AceTransport {
@@ -209,16 +201,10 @@ export class AceTransport {
         }),
       });
     } catch {
-      throw new SfError(
-        'Runtime token exchange failed. Check the authorized Salesforce connection.',
-        'RuntimeAuthFailed',
-      );
+      throw new SfError(messages.getMessage('errors.exchange'), 'RuntimeAuthFailed');
     }
     if (!response.ok)
-      throw new SfError(
-        `Runtime token exchange returned HTTP ${response.status}. Check OAuth scopes and tenant provisioning.`,
-        'RuntimeAuthFailed',
-      );
+      throw new SfError(messages.getMessage('errors.exchange-http', [response.status]), 'RuntimeAuthFailed');
     try {
       const value: unknown = await response.json();
       if (
@@ -238,7 +224,7 @@ export class AceTransport {
       if (!new URL(returnedOrigin).hostname.endsWith('.salesforce.com')) throw new Error();
       return { origin: returnedOrigin, token: value.access_token };
     } catch {
-      throw new SfError('Salesforce did not return a usable runtime token and tenant origin.', 'InvalidRuntimeSession');
+      throw new SfError(messages.getMessage('errors.runtime-session'), 'InvalidRuntimeSession');
     }
   }
 
@@ -261,15 +247,16 @@ export class AceTransport {
       });
     } catch {
       throw new SfError(
-        plan.method === 'GET'
-          ? 'Read failed or timed out. Check authentication and connectivity.'
-          : 'Write outcome is unknown. Read the affected state before retrying; no automatic retry was made.',
+        plan.method === 'GET' ? messages.getMessage('errors.read-failed') : messages.getMessage('errors.write-unknown'),
         plan.method === 'GET' ? 'TransportFailed' : 'WriteOutcomeUnknown',
       );
     }
     if (!response.ok)
       throw new SfError(
-        `ACE returned HTTP ${response.status}. ${plan.method === 'GET' ? 'Check permissions, identity, and inputs.' : 'Read the affected state before retrying.'}`,
+        messages.getMessage('errors.http', [
+          response.status,
+          messages.getMessage(plan.method === 'GET' ? 'errors.read-http' : 'errors.write-http'),
+        ]),
         `AceHttp${response.status}`,
       );
     let data: unknown;
@@ -277,28 +264,17 @@ export class AceTransport {
       const text = await response.text();
       data = text ? (JSON.parse(text) as unknown) : null;
     } catch {
-      throw new SfError(
-        'ACE returned an unreadable response. For writes, verify current state before retrying.',
-        'InvalidResponse',
-      );
+      throw new SfError(messages.getMessage('errors.response'), 'InvalidResponse');
     }
     const warnings: string[] = [];
     if (plan.sessionProjection) {
       data = projectSessions(data, plan.sessionProjection);
-      warnings.push(
-        'Session summaries are projected from the conversation API, not the session index. Missing fields remain absent. Pagination follows the conversation API.',
-      );
+      warnings.push(messages.getMessage('warnings.projection'));
     }
-    if (response.status === 202)
-      warnings.push('Accepted by Salesforce; asynchronous completion and memory extraction are not verified.');
-    if (operation.command === 'ace agent create')
-      warnings.push(
-        'Registration response received; use ace agent get to verify Active status. Additional graph readiness is separate.',
-      );
-    if (operation.command === 'ace context get')
-      warnings.push('Fast mode does not apply token_budget or latency_sensitivity.');
-    if (operation.command === 'ace memory update')
-      warnings.push('Updated memories may have new identifiers; use the returned identifiers.');
+    if (response.status === 202) warnings.push(messages.getMessage('warnings.accepted'));
+    if (operation.command === 'ace agent create') warnings.push(messages.getMessage('warnings.registration'));
+    if (operation.command === 'ace context get') warnings.push(messages.getMessage('warnings.fast-mode'));
+    if (operation.command === 'ace memory update') warnings.push(messages.getMessage('warnings.memory-update'));
     const result: Result = {
       operation: plan.command,
       ...(plan.sessionProjection ? { source: 'conversation' as const } : {}),

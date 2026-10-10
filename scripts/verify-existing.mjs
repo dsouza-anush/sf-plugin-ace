@@ -17,6 +17,7 @@ function read(command, flags) {
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
       timeout: 45000,
+      maxBuffer: 16 * 1024 * 1024,
     });
   } catch (error) {
     raw = error.stdout;
@@ -55,7 +56,8 @@ report.assertions.sessionListed =
 report.assertions.contextAssembled =
   context.status === 0 &&
   typeof context.result.data.contextId === 'string' &&
-  Array.isArray(context.result.data.userContext);
+  Array.isArray(context.result.data.userContext) &&
+  context.result.data.userContext.length > 0;
 report.sessionState = graph.result?.data?.sessions?.find((s) => s.sessionId === targetSession)?.status;
 report.complete = report.commands.every((r) => r.exitStatus === 0) && Object.values(report.assertions).every(Boolean);
 if (process.env.ACE_LIVE_REPORT)

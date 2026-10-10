@@ -21,6 +21,7 @@ function cli(args, preload) {
   assert(!result.error, result.error?.message);
   assert(!result.stdout.includes('synthetic-runtime-token'), 'credential leaked to stdout');
   assert(!result.stderr.includes('synthetic-runtime-token'), 'credential leaked to stderr');
+  assert(result.stdout.trim(), `CLI returned no JSON (exit ${result.status}): ${result.stderr}`);
   return { code: result.status, output: JSON.parse(result.stdout) };
 }
 test('actual CLI dry-run, disabled writes, fingerprint approval, and malformed body', async () => {
@@ -100,4 +101,61 @@ test('actual CLI JSON body from stdin stays offline in dry-run', () => {
   );
   assert.equal(result.status, 0, result.stderr);
   assert.equal(JSON.parse(result.stdout).result.plan.body.memories[0].content, 'exact');
+});
+
+test('actual CLI continuation preserves filters, source, target, version, and timeout', async () => {
+  const folder = await mkdtemp(join(tmpdir(), 'ace-cli-pagination-'));
+  try {
+    const mock = join(folder, 'fetch.mjs');
+    await writeFile(
+      mock,
+      `import { Org } from ${JSON.stringify(import.meta.resolve('@salesforce/core'))}; Org.create = async () => undefined; const originalFetch = globalThis.fetch; globalThis.fetch = async (url, init) => String(url).startsWith('https://synthetic.example/') ? Response.json({ conversationId: 'c', sessions: [{sessionId: 's', status: 'CLOSED'}], nextPageToken: 'page-two' }) : originalFetch(url, init);`,
+    );
+    const result = cli(
+      [
+        'ace',
+        'session',
+        'list',
+        '--agent-id',
+        'a',
+        '--conversation-id',
+        'c',
+        '--owner-id',
+        'owner',
+        '--owner-type',
+        'employee',
+        '--source',
+        'conversation',
+        '--status',
+        'CLOSED',
+        '--fields',
+        'id',
+        '--api-version',
+        '67.0',
+        '--timeout',
+        '120',
+      ],
+      mock,
+    );
+    assert.equal(result.code, 0);
+    assert.deepEqual(result.output.result.continuation, {
+      command: 'ace session list',
+      flags: {
+        'agent-id': 'a',
+        'conversation-id': 'c',
+        'owner-id': 'owner',
+        'owner-type': 'employee',
+        status: 'CLOSED',
+        fields: ['id'],
+        'page-token': 'page-two',
+        source: 'conversation',
+        'runtime-origin': 'https://synthetic.example',
+        'api-version': '67.0',
+        timeout: 120,
+      },
+    });
+    assert.deepEqual(result.output.result.data.sessions, [{ id: 's' }]);
+  } finally {
+    await rm(folder, { recursive: true, force: true });
+  }
 });

@@ -5,6 +5,7 @@
       "aliases": [],
       "args": {},
       "description": "POST /services/data/v{version}/ssot/agentic/agent\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --body-file request.json --dry-run --json"
       ],
@@ -109,6 +110,7 @@
         "agent",
         "create.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Register an ACE agent using a reviewed configuration file."
     },
@@ -117,6 +119,7 @@
       "aliases": [],
       "args": {},
       "description": "DELETE /services/data/v{version}/ssot/agentic/agent/{agentId}\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --dry-run --json"
       ],
@@ -220,6 +223,7 @@
         "agent",
         "delete.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Irreversibly delete an ACE agent and its associated data."
     },
@@ -228,6 +232,7 @@
       "aliases": [],
       "args": {},
       "description": "GET /services/data/v{version}/ssot/agentic/agent/{agentId}\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --json"
       ],
@@ -309,6 +314,7 @@
         "agent",
         "get.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Get an ACE agent registration by ID or API name."
     },
@@ -317,6 +323,7 @@
       "aliases": [],
       "args": {},
       "description": "GET /services/data/v{version}/ssot/agentic/agents\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org  --json"
       ],
@@ -426,6 +433,7 @@
         "agent",
         "list.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "List ACE agent registrations."
     },
@@ -434,6 +442,7 @@
       "aliases": [],
       "args": {},
       "description": "GET /api/v1/agentic/context\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --json"
       ],
@@ -582,6 +591,7 @@
         "context",
         "get.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Retrieve assembled ACE context in fast mode."
     },
@@ -590,6 +600,7 @@
       "aliases": [],
       "args": {},
       "description": "POST /api/v1/agentic/conversations/{conversationId}/close\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --dry-run --json"
       ],
@@ -708,6 +719,7 @@
         "conversation",
         "close.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Submit a request to close a conversation."
     },
@@ -716,6 +728,7 @@
       "aliases": [],
       "args": {},
       "description": "POST /api/v1/agentic/conversations\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --body-file request.json --dry-run --json"
       ],
@@ -835,6 +848,7 @@
         "conversation",
         "create.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Create a conversation for an authorized owner."
     },
@@ -843,6 +857,7 @@
       "aliases": [],
       "args": {},
       "description": "GET /api/v1/agentic/conversations/{conversationId}\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --json"
       ],
@@ -996,6 +1011,7 @@
         "conversation",
         "get.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Retrieve a conversation data graph."
     },
@@ -1004,6 +1020,7 @@
       "aliases": [],
       "args": {},
       "description": "GET /api/v1/agentic/conversations\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type individual --json"
       ],
@@ -1152,6 +1169,7 @@
         "conversation",
         "list.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "List conversations for an authorized owner."
     },
@@ -1160,6 +1178,7 @@
       "aliases": [],
       "args": {},
       "description": "POST /api/v1/agentic/conversations/{conversationId}/entries\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --body-file request.json --dry-run --json"
       ],
@@ -1287,6 +1306,7 @@
         "entry",
         "add.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Add messages, traces, or entries to a conversation."
     },
@@ -1295,6 +1315,7 @@
       "aliases": [],
       "args": {},
       "description": "POST /api/v1/agentic/memory\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --body-file request.json --dry-run --json"
       ],
@@ -1442,6 +1463,7 @@
         "memory",
         "create.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Create memories for an authorized profile."
     },
@@ -1450,6 +1472,7 @@
       "aliases": [],
       "args": {},
       "description": "DELETE /api/v1/agentic/memory\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --body-file request.json --dry-run --json"
       ],
@@ -1597,6 +1620,7 @@
         "memory",
         "delete.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Delete explicitly selected memories."
     },
@@ -1605,6 +1629,7 @@
       "aliases": [],
       "args": {},
       "description": "GET /api/v1/agentic/memory\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --json"
       ],
@@ -1721,6 +1746,7 @@
         "memory",
         "read.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Read memories in an explicitly selected profile category."
     },
@@ -1729,6 +1755,7 @@
       "aliases": [],
       "args": {},
       "description": "POST /api/v1/agentic/memory\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --body-file request.json --dry-run --json"
       ],
@@ -1876,6 +1903,7 @@
         "memory",
         "update.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Replace memories and return their new identifiers."
     },
@@ -1884,6 +1912,7 @@
       "aliases": [],
       "args": {},
       "description": "POST /api/v1/agentic/conversations/{conversationId}/sessions/{sessionId}/participants\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --session-id EXAMPLE_ID --body-file request.json --dry-run --json"
       ],
@@ -2019,6 +2048,7 @@
         "participant",
         "add.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Add participants to a conversation session."
     },
@@ -2093,6 +2123,7 @@
         "ace",
         "schema.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Describe ACE commands, parameters, and JSON request schemas without authentication."
     },
@@ -2101,6 +2132,7 @@
       "aliases": [],
       "args": {},
       "description": "POST /api/v1/agentic/conversations/{conversationId}/sessions/{sessionId}/close\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --session-id EXAMPLE_ID --dry-run --json"
       ],
@@ -2227,6 +2259,7 @@
         "session",
         "close.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Submit session closure and trigger memory extraction."
     },
@@ -2235,6 +2268,7 @@
       "aliases": [],
       "args": {},
       "description": "POST /api/v1/agentic/conversations/{conversationId}/sessions\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --body-file request.json --dry-run --json"
       ],
@@ -2362,6 +2396,7 @@
         "session",
         "create.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "Create a conversation session with participants."
     },
@@ -2370,6 +2405,7 @@
       "aliases": [],
       "args": {},
       "description": "GET /api/v1/agentic/conversations/{conversationId}/sessions\n\nUse --source conversation to project session summaries from the governed conversation API when the session index omits closed sessions. The result identifies its source. This mode supports status and id/startTime/status field projection; time-range and participant-id filters are rejected. Missing fields remain absent.\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type individual --json",
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type employee --source conversation --status CLOSED --json"
@@ -2539,9 +2575,10 @@
         "session",
         "list.js"
       ],
+      "state": "beta",
       "strict": true,
       "summary": "List sessions in an authorized conversation."
     }
   },
-  "version": "0.1.0-beta.2"
+  "version": "0.1.0-beta.3"
 }

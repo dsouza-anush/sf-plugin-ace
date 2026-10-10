@@ -73,6 +73,8 @@ async function readBody(file: string): Promise<unknown> {
 }
 
 export abstract class AceCommand extends SfCommand<Result | { state: 'planned'; plan: Plan }> {
+  public static readonly state = 'beta';
+
   protected async runOperation(command: string): Promise<Result | { state: 'planned'; plan: Plan }> {
     const { flags } = await this.parse(this.constructor as typeof AceCommand);
     const operation: Operation = operationFor(command);
@@ -135,6 +137,7 @@ export abstract class AceCommand extends SfCommand<Result | { state: 'planned'; 
       if (org) result.continuation.flags['target-org'] = org.getUsername();
       if (explicitOrigin) result.continuation.flags['runtime-origin'] = explicitOrigin;
       result.continuation.flags['api-version'] = apiVersion;
+      result.continuation.flags.timeout = Number(flags.timeout);
     }
     if (!this.jsonEnabled()) this.logJson(result);
     return result;

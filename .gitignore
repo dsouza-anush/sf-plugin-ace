@@ -7,3 +7,5 @@ coverage/
 .sf/
 .sfdx/
 .DS_Store
+
+.release-artifacts/

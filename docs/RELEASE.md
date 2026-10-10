@@ -3,7 +3,7 @@
 Package: `@anushdsouza/sf-plugin-ace`. Source: `dsouza-anush/sf-plugin-ace`. Independent community beta; no Salesforce signing or certification claim.
 
 1. Update the version, changelog, API coverage, and live-verification matrix. Record unsupported server features and failed live operations explicitly.
-2. Run `npm ci` and `npm run release:check` on Node 22.19+ and Node 24. The gate includes TypeScript, Salesforce lint, formatting, unit and HTTPS workflow tests, all command help, clean packed installation, public-source scanning, and a production dependency audit.
+2. Run `npm ci` and `npm run release:check` on Node 22.19+ and Node 24. The gate includes TypeScript, Salesforce lint, formatting, unit and HTTPS workflow tests, all command help, clean packed installation, public-source scanning, and an audit of production and development dependencies.
 3. Export only allowlisted source using `npm run release:export -- /new/empty/directory`. Keep org-specific records and raw responses in the private development workspace. Initialize a clean Git repository for the first publication; never publish inherited private history.
 4. Verify the fresh exported source with the same release gate. Inspect `npm pack --json`, record the artifact SHA-256, and verify installation in a clean Salesforce CLI host.
 5. Push the exact reviewed source to the release repository. Require successful CI, verify the matching `v<version>` tag with `npm run release:tag:check -- v<version>`, and create the GitHub Release with the tarball and checksum.
