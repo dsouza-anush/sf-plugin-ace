@@ -1,34 +1,2042 @@
 {
   "commands": {
+    "ace:agent:create": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "POST /services/data/v{version}/ssot/agentic/agent\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --body-file request.json --dry-run --json"
+      ],
+      "flags": {
+        "allow-write": {
+          "allowNo": false,
+          "name": "allow-write",
+          "summary": "Explicitly enable this mutation; confirmation is also required.",
+          "type": "boolean"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "body-file": {
+          "char": "f",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "body-file",
+          "required": true,
+          "summary": "JSON request body file; use - to read standard input.",
+          "type": "option"
+        },
+        "confirm": {
+          "dependsOn": [
+            "no-prompt"
+          ],
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "confirm",
+          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "no-prompt": {
+          "allowNo": false,
+          "name": "no-prompt",
+          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
+          "type": "boolean"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "required": true,
+          "summary": "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:agent:create",
+      "isESM": true,
+      "permutations": [
+        "ace:agent:create",
+        "agent:ace:create",
+        "agent:create:ace",
+        "ace:create:agent",
+        "create:ace:agent",
+        "create:agent:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "agent",
+        "create.js"
+      ],
+      "strict": true,
+      "summary": "Register an ACE agent using a reviewed configuration file."
+    },
+    "ace:agent:delete": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "DELETE /services/data/v{version}/ssot/agentic/agent/{agentId}\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --dry-run --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Registered ACE agent ID or API name.",
+          "type": "option"
+        },
+        "allow-write": {
+          "allowNo": false,
+          "name": "allow-write",
+          "summary": "Explicitly enable this mutation; confirmation is also required.",
+          "type": "boolean"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "confirm": {
+          "dependsOn": [
+            "no-prompt"
+          ],
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "confirm",
+          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "no-prompt": {
+          "allowNo": false,
+          "name": "no-prompt",
+          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
+          "type": "boolean"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "required": true,
+          "summary": "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:agent:delete",
+      "isESM": true,
+      "permutations": [
+        "ace:agent:delete",
+        "agent:ace:delete",
+        "agent:delete:ace",
+        "ace:delete:agent",
+        "delete:ace:agent",
+        "delete:agent:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "agent",
+        "delete.js"
+      ],
+      "strict": true,
+      "summary": "Irreversibly delete an ACE agent and its associated data."
+    },
+    "ace:agent:get": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "GET /services/data/v{version}/ssot/agentic/agent/{agentId}\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Registered ACE agent ID or API name.",
+          "type": "option"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "required": true,
+          "summary": "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:agent:get",
+      "isESM": true,
+      "permutations": [
+        "ace:agent:get",
+        "agent:ace:get",
+        "agent:get:ace",
+        "ace:get:agent",
+        "get:ace:agent",
+        "get:agent:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "agent",
+        "get.js"
+      ],
+      "strict": true,
+      "summary": "Get an ACE agent registration by ID or API name."
+    },
+    "ace:agent:list": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "GET /services/data/v{version}/ssot/agentic/agents\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org  --json"
+      ],
+      "flags": {
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "filters": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "filters",
+          "required": false,
+          "summary": "Agent Configuration filter expression.",
+          "type": "option"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "limit": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "limit",
+          "required": false,
+          "summary": "Maximum agents per page (1–200).",
+          "type": "option"
+        },
+        "offset": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "offset",
+          "required": false,
+          "summary": "Agent list offset (zero or greater).",
+          "type": "option"
+        },
+        "order-by": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "order-by",
+          "options": [
+            "ASC",
+            "DESC"
+          ],
+          "required": false,
+          "summary": "Agent Configuration ordering direction.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "required": true,
+          "summary": "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:agent:list",
+      "isESM": true,
+      "permutations": [
+        "ace:agent:list",
+        "agent:ace:list",
+        "agent:list:ace",
+        "ace:list:agent",
+        "list:ace:agent",
+        "list:agent:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "agent",
+        "list.js"
+      ],
+      "strict": true,
+      "summary": "List ACE agent registrations."
+    },
+    "ace:context:get": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "GET /api/v1/agentic/context\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Registered ACE agent API name.",
+          "type": "option"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "conversation-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "conversation-id",
+          "required": true,
+          "summary": "Conversation identifier.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "latency-sensitivity": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "latency-sensitivity",
+          "options": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "required": false,
+          "summary": "Published parameter that has no effect in fast mode.",
+          "type": "option"
+        },
+        "mode": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "mode",
+          "options": [
+            "fast"
+          ],
+          "required": false,
+          "summary": "Context retrieval mode; only fast is supported.",
+          "type": "option"
+        },
+        "owner-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "owner-id",
+          "required": false,
+          "summary": "Authorized conversation owner identifier; does not replace bearer identity.",
+          "type": "option"
+        },
+        "owner-type": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "owner-type",
+          "options": [
+            "individual",
+            "employee"
+          ],
+          "required": false,
+          "summary": "Conversation owner type.",
+          "type": "option"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        },
+        "token-budget": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "token-budget",
+          "required": false,
+          "summary": "Published parameter that has no effect in fast mode.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:context:get",
+      "isESM": true,
+      "permutations": [
+        "ace:context:get",
+        "context:ace:get",
+        "context:get:ace",
+        "ace:get:context",
+        "get:ace:context",
+        "get:context:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "context",
+        "get.js"
+      ],
+      "strict": true,
+      "summary": "Retrieve assembled ACE context in fast mode."
+    },
+    "ace:conversation:close": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "POST /api/v1/agentic/conversations/{conversationId}/close\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --dry-run --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Registered ACE agent API name.",
+          "type": "option"
+        },
+        "allow-write": {
+          "allowNo": false,
+          "name": "allow-write",
+          "summary": "Explicitly enable this mutation; confirmation is also required.",
+          "type": "boolean"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "confirm": {
+          "dependsOn": [
+            "no-prompt"
+          ],
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "confirm",
+          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
+          "type": "option"
+        },
+        "conversation-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "conversation-id",
+          "required": true,
+          "summary": "Conversation identifier.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "no-prompt": {
+          "allowNo": false,
+          "name": "no-prompt",
+          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
+          "type": "boolean"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:conversation:close",
+      "isESM": true,
+      "permutations": [
+        "ace:conversation:close",
+        "conversation:ace:close",
+        "conversation:close:ace",
+        "ace:close:conversation",
+        "close:ace:conversation",
+        "close:conversation:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "conversation",
+        "close.js"
+      ],
+      "strict": true,
+      "summary": "Submit a request to close a conversation."
+    },
+    "ace:conversation:create": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "POST /api/v1/agentic/conversations\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --body-file request.json --dry-run --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Registered ACE agent API name.",
+          "type": "option"
+        },
+        "allow-write": {
+          "allowNo": false,
+          "name": "allow-write",
+          "summary": "Explicitly enable this mutation; confirmation is also required.",
+          "type": "boolean"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "body-file": {
+          "char": "f",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "body-file",
+          "required": true,
+          "summary": "JSON request body file; use - to read standard input.",
+          "type": "option"
+        },
+        "confirm": {
+          "dependsOn": [
+            "no-prompt"
+          ],
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "confirm",
+          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "no-prompt": {
+          "allowNo": false,
+          "name": "no-prompt",
+          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
+          "type": "boolean"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:conversation:create",
+      "isESM": true,
+      "permutations": [
+        "ace:conversation:create",
+        "conversation:ace:create",
+        "conversation:create:ace",
+        "ace:create:conversation",
+        "create:ace:conversation",
+        "create:conversation:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "conversation",
+        "create.js"
+      ],
+      "strict": true,
+      "summary": "Create a conversation for an authorized owner."
+    },
+    "ace:conversation:get": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "GET /api/v1/agentic/conversations/{conversationId}\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Registered ACE agent API name.",
+          "type": "option"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "conversation-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "conversation-id",
+          "required": true,
+          "summary": "Conversation identifier.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "owner-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "owner-id",
+          "required": true,
+          "summary": "Authorized conversation owner identifier; does not replace bearer identity.",
+          "type": "option"
+        },
+        "owner-type": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "owner-type",
+          "options": [
+            "individual",
+            "employee"
+          ],
+          "required": false,
+          "summary": "Conversation owner type.",
+          "type": "option"
+        },
+        "page-token": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "page-token",
+          "required": false,
+          "summary": "Continuation token; preserve the original identity, filters, and scope.",
+          "type": "option"
+        },
+        "participant-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "participant-id",
+          "required": false,
+          "summary": "Participant filter.",
+          "type": "option"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "scope": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "scope",
+          "options": [
+            "messages",
+            "traces",
+            "all"
+          ],
+          "required": false,
+          "summary": "Conversation content scope.",
+          "type": "option"
+        },
+        "session-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "session-id",
+          "required": false,
+          "summary": "Session identifier.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:conversation:get",
+      "isESM": true,
+      "permutations": [
+        "ace:conversation:get",
+        "conversation:ace:get",
+        "conversation:get:ace",
+        "ace:get:conversation",
+        "get:ace:conversation",
+        "get:conversation:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "conversation",
+        "get.js"
+      ],
+      "strict": true,
+      "summary": "Retrieve a conversation data graph."
+    },
+    "ace:conversation:list": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "GET /api/v1/agentic/conversations\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type individual --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Registered ACE agent API name.",
+          "type": "option"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "fields": {
+          "hasDynamicHelp": false,
+          "multiple": true,
+          "name": "fields",
+          "required": false,
+          "summary": "Projection field; repeat the flag for multiple fields.",
+          "type": "option"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "owner-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "owner-id",
+          "required": true,
+          "summary": "Authorized conversation owner identifier; does not replace bearer identity.",
+          "type": "option"
+        },
+        "owner-type": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "owner-type",
+          "options": [
+            "individual",
+            "employee"
+          ],
+          "required": true,
+          "summary": "Conversation owner type.",
+          "type": "option"
+        },
+        "page-token": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "page-token",
+          "required": false,
+          "summary": "Continuation token; preserve the original identity, filters, and scope.",
+          "type": "option"
+        },
+        "participant-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "participant-id",
+          "required": false,
+          "summary": "Participant filter.",
+          "type": "option"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "status": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "status",
+          "required": false,
+          "summary": "Conversation or session status filter.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "time-range": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "time-range",
+          "required": false,
+          "summary": "Tenant-supported time range expression; its grammar is not published.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:conversation:list",
+      "isESM": true,
+      "permutations": [
+        "ace:conversation:list",
+        "conversation:ace:list",
+        "conversation:list:ace",
+        "ace:list:conversation",
+        "list:ace:conversation",
+        "list:conversation:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "conversation",
+        "list.js"
+      ],
+      "strict": true,
+      "summary": "List conversations for an authorized owner."
+    },
+    "ace:entry:add": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "POST /api/v1/agentic/conversations/{conversationId}/entries\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --body-file request.json --dry-run --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Registered ACE agent API name.",
+          "type": "option"
+        },
+        "allow-write": {
+          "allowNo": false,
+          "name": "allow-write",
+          "summary": "Explicitly enable this mutation; confirmation is also required.",
+          "type": "boolean"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "body-file": {
+          "char": "f",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "body-file",
+          "required": true,
+          "summary": "JSON request body file; use - to read standard input.",
+          "type": "option"
+        },
+        "confirm": {
+          "dependsOn": [
+            "no-prompt"
+          ],
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "confirm",
+          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
+          "type": "option"
+        },
+        "conversation-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "conversation-id",
+          "required": true,
+          "summary": "Conversation identifier.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "no-prompt": {
+          "allowNo": false,
+          "name": "no-prompt",
+          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
+          "type": "boolean"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:entry:add",
+      "isESM": true,
+      "permutations": [
+        "ace:entry:add",
+        "entry:ace:add",
+        "entry:add:ace",
+        "ace:add:entry",
+        "add:ace:entry",
+        "add:entry:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "entry",
+        "add.js"
+      ],
+      "strict": true,
+      "summary": "Add messages, traces, or entries to a conversation."
+    },
+    "ace:memory:create": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "POST /api/v1/agentic/memory\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --body-file request.json --dry-run --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": false,
+          "summary": "Registered ACE agent API name.",
+          "type": "option"
+        },
+        "allow-write": {
+          "allowNo": false,
+          "name": "allow-write",
+          "summary": "Explicitly enable this mutation; confirmation is also required.",
+          "type": "boolean"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "body-file": {
+          "char": "f",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "body-file",
+          "required": true,
+          "summary": "JSON request body file; use - to read standard input.",
+          "type": "option"
+        },
+        "category": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "category",
+          "required": true,
+          "summary": "Exact tenant-supported memory category; no category is inferred.",
+          "type": "option"
+        },
+        "confirm": {
+          "dependsOn": [
+            "no-prompt"
+          ],
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "confirm",
+          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "no-prompt": {
+          "allowNo": false,
+          "name": "no-prompt",
+          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
+          "type": "boolean"
+        },
+        "profile-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "profile-id",
+          "required": true,
+          "summary": "Authorized memory profile identifier.",
+          "type": "option"
+        },
+        "profile-type": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "profile-type",
+          "options": [
+            "individual",
+            "employee"
+          ],
+          "required": true,
+          "summary": "Memory profile type.",
+          "type": "option"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:memory:create",
+      "isESM": true,
+      "permutations": [
+        "ace:memory:create",
+        "memory:ace:create",
+        "memory:create:ace",
+        "ace:create:memory",
+        "create:ace:memory",
+        "create:memory:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "memory",
+        "create.js"
+      ],
+      "strict": true,
+      "summary": "Create memories for an authorized profile."
+    },
+    "ace:memory:delete": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "DELETE /api/v1/agentic/memory\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --body-file request.json --dry-run --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": false,
+          "summary": "Registered ACE agent API name.",
+          "type": "option"
+        },
+        "allow-write": {
+          "allowNo": false,
+          "name": "allow-write",
+          "summary": "Explicitly enable this mutation; confirmation is also required.",
+          "type": "boolean"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "body-file": {
+          "char": "f",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "body-file",
+          "required": true,
+          "summary": "JSON request body file; use - to read standard input.",
+          "type": "option"
+        },
+        "category": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "category",
+          "required": true,
+          "summary": "Exact tenant-supported memory category; no category is inferred.",
+          "type": "option"
+        },
+        "confirm": {
+          "dependsOn": [
+            "no-prompt"
+          ],
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "confirm",
+          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "no-prompt": {
+          "allowNo": false,
+          "name": "no-prompt",
+          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
+          "type": "boolean"
+        },
+        "profile-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "profile-id",
+          "required": true,
+          "summary": "Authorized memory profile identifier.",
+          "type": "option"
+        },
+        "profile-type": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "profile-type",
+          "options": [
+            "individual",
+            "employee"
+          ],
+          "required": true,
+          "summary": "Memory profile type.",
+          "type": "option"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:memory:delete",
+      "isESM": true,
+      "permutations": [
+        "ace:memory:delete",
+        "memory:ace:delete",
+        "memory:delete:ace",
+        "ace:delete:memory",
+        "delete:ace:memory",
+        "delete:memory:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "memory",
+        "delete.js"
+      ],
+      "strict": true,
+      "summary": "Delete explicitly selected memories."
+    },
+    "ace:memory:read": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "GET /api/v1/agentic/memory\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": false,
+          "summary": "Registered ACE agent API name.",
+          "type": "option"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "category": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "category",
+          "required": true,
+          "summary": "Exact tenant-supported memory category; no category is inferred.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "profile-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "profile-id",
+          "required": true,
+          "summary": "Authorized memory profile identifier.",
+          "type": "option"
+        },
+        "profile-type": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "profile-type",
+          "options": [
+            "individual",
+            "employee"
+          ],
+          "required": true,
+          "summary": "Memory profile type.",
+          "type": "option"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:memory:read",
+      "isESM": true,
+      "permutations": [
+        "ace:memory:read",
+        "memory:ace:read",
+        "memory:read:ace",
+        "ace:read:memory",
+        "read:ace:memory",
+        "read:memory:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "memory",
+        "read.js"
+      ],
+      "strict": true,
+      "summary": "Read memories in an explicitly selected profile category."
+    },
+    "ace:memory:update": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "POST /api/v1/agentic/memory\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --body-file request.json --dry-run --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": false,
+          "summary": "Registered ACE agent API name.",
+          "type": "option"
+        },
+        "allow-write": {
+          "allowNo": false,
+          "name": "allow-write",
+          "summary": "Explicitly enable this mutation; confirmation is also required.",
+          "type": "boolean"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "body-file": {
+          "char": "f",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "body-file",
+          "required": true,
+          "summary": "JSON request body file; use - to read standard input.",
+          "type": "option"
+        },
+        "category": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "category",
+          "required": true,
+          "summary": "Exact tenant-supported memory category; no category is inferred.",
+          "type": "option"
+        },
+        "confirm": {
+          "dependsOn": [
+            "no-prompt"
+          ],
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "confirm",
+          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "no-prompt": {
+          "allowNo": false,
+          "name": "no-prompt",
+          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
+          "type": "boolean"
+        },
+        "profile-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "profile-id",
+          "required": true,
+          "summary": "Authorized memory profile identifier.",
+          "type": "option"
+        },
+        "profile-type": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "profile-type",
+          "options": [
+            "individual",
+            "employee"
+          ],
+          "required": true,
+          "summary": "Memory profile type.",
+          "type": "option"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:memory:update",
+      "isESM": true,
+      "permutations": [
+        "ace:memory:update",
+        "memory:ace:update",
+        "memory:update:ace",
+        "ace:update:memory",
+        "update:ace:memory",
+        "update:memory:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "memory",
+        "update.js"
+      ],
+      "strict": true,
+      "summary": "Replace memories and return their new identifiers."
+    },
+    "ace:participant:add": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "POST /api/v1/agentic/conversations/{conversationId}/sessions/{sessionId}/participants\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
+      "examples": [
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --session-id EXAMPLE_ID --body-file request.json --dry-run --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Registered ACE agent API name.",
+          "type": "option"
+        },
+        "allow-write": {
+          "allowNo": false,
+          "name": "allow-write",
+          "summary": "Explicitly enable this mutation; confirmation is also required.",
+          "type": "boolean"
+        },
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
+        },
+        "body-file": {
+          "char": "f",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "body-file",
+          "required": true,
+          "summary": "JSON request body file; use - to read standard input.",
+          "type": "option"
+        },
+        "confirm": {
+          "dependsOn": [
+            "no-prompt"
+          ],
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "confirm",
+          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
+          "type": "option"
+        },
+        "conversation-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "conversation-id",
+          "required": true,
+          "summary": "Conversation identifier.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "no-prompt": {
+          "allowNo": false,
+          "name": "no-prompt",
+          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
+          "type": "boolean"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "session-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "session-id",
+          "required": true,
+          "summary": "Session identifier.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:participant:add",
+      "isESM": true,
+      "permutations": [
+        "ace:participant:add",
+        "participant:ace:add",
+        "participant:add:ace",
+        "ace:add:participant",
+        "add:ace:participant",
+        "add:participant:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "participant",
+        "add.js"
+      ],
+      "strict": true,
+      "summary": "Add participants to a conversation session."
+    },
     "ace:schema": {
+      "aliasPermutations": [],
       "aliases": [],
       "args": {},
       "description": "Lists the implemented published operations. JSON schemas describe structural input validation; command validation also enforces conditional requirements such as Message content and data-space spelling exclusivity.",
+      "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --json",
         "<%= config.bin %> <%= command.id %> --command \"ace session create\" --json"
       ],
       "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
         "command": {
-          "name": "command",
-          "summary": "Space-separated ACE command name to describe.",
           "hasDynamicHelp": false,
           "multiple": false,
+          "name": "command",
           "options": [
             "ace agent list",
             "ace agent get",
@@ -49,2054 +2057,47 @@
             "ace memory delete",
             "ace context get"
           ],
+          "summary": "Space-separated ACE command name to describe.",
           "type": "option"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
         }
       },
       "hasDynamicHelp": false,
       "hiddenAliases": [],
       "id": "ace:schema",
+      "isESM": true,
+      "permutations": [
+        "ace:schema",
+        "schema:ace"
+      ],
       "pluginAlias": "@anushdsouza/sf-plugin-ace",
       "pluginName": "@anushdsouza/sf-plugin-ace",
       "pluginType": "core",
-      "strict": true,
-      "summary": "Describe ACE commands, parameters, and JSON request schemas without authentication.",
-      "enableJsonFlag": true,
-      "isESM": true,
       "relativePath": [
         "lib",
         "commands",
         "ace",
         "schema.js"
       ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:schema",
-        "schema:ace"
-      ]
-    },
-    "ace:context:get": {
-      "aliases": [],
-      "args": {},
-      "description": "GET /api/v1/agentic/context\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": true,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "conversation-id": {
-          "name": "conversation-id",
-          "required": true,
-          "summary": "Conversation identifier.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "owner-id": {
-          "name": "owner-id",
-          "required": false,
-          "summary": "Authorized conversation owner identifier; does not replace bearer identity.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "owner-type": {
-          "name": "owner-type",
-          "required": false,
-          "summary": "Conversation owner type.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "options": [
-            "individual",
-            "employee"
-          ],
-          "type": "option"
-        },
-        "mode": {
-          "name": "mode",
-          "required": false,
-          "summary": "Context retrieval mode; only fast is supported.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "options": [
-            "fast"
-          ],
-          "type": "option"
-        },
-        "latency-sensitivity": {
-          "name": "latency-sensitivity",
-          "required": false,
-          "summary": "Published parameter that has no effect in fast mode.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "options": [
-            "low",
-            "medium",
-            "high"
-          ],
-          "type": "option"
-        },
-        "token-budget": {
-          "name": "token-budget",
-          "required": false,
-          "summary": "Published parameter that has no effect in fast mode.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:context:get",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
       "strict": true,
-      "summary": "Retrieve assembled ACE context in fast mode.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "context",
-        "get.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:context:get",
-        "context:ace:get",
-        "context:get:ace",
-        "ace:get:context",
-        "get:ace:context",
-        "get:context:ace"
-      ]
-    },
-    "ace:agent:create": {
-      "aliases": [],
-      "args": {},
-      "description": "POST /services/data/v{version}/ssot/agentic/agent\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --body-file request.json --dry-run --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "required": true,
-          "summary": "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "body-file": {
-          "char": "f",
-          "name": "body-file",
-          "required": true,
-          "summary": "JSON request body file; use - to read standard input.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "allow-write": {
-          "name": "allow-write",
-          "summary": "Explicitly enable this mutation; confirmation is also required.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "no-prompt": {
-          "name": "no-prompt",
-          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "confirm": {
-          "dependsOn": [
-            "no-prompt"
-          ],
-          "name": "confirm",
-          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:agent:create",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Register an ACE agent using a reviewed configuration file.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "agent",
-        "create.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:agent:create",
-        "agent:ace:create",
-        "agent:create:ace",
-        "ace:create:agent",
-        "create:ace:agent",
-        "create:agent:ace"
-      ]
-    },
-    "ace:agent:delete": {
-      "aliases": [],
-      "args": {},
-      "description": "DELETE /services/data/v{version}/ssot/agentic/agent/{agentId}\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --dry-run --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "required": true,
-          "summary": "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "allow-write": {
-          "name": "allow-write",
-          "summary": "Explicitly enable this mutation; confirmation is also required.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "no-prompt": {
-          "name": "no-prompt",
-          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "confirm": {
-          "dependsOn": [
-            "no-prompt"
-          ],
-          "name": "confirm",
-          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": true,
-          "summary": "Registered ACE agent ID or API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:agent:delete",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Irreversibly delete an ACE agent and its associated data.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "agent",
-        "delete.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:agent:delete",
-        "agent:ace:delete",
-        "agent:delete:ace",
-        "ace:delete:agent",
-        "delete:ace:agent",
-        "delete:agent:ace"
-      ]
-    },
-    "ace:agent:get": {
-      "aliases": [],
-      "args": {},
-      "description": "GET /services/data/v{version}/ssot/agentic/agent/{agentId}\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "required": true,
-          "summary": "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": true,
-          "summary": "Registered ACE agent ID or API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:agent:get",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Get an ACE agent registration by ID or API name.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "agent",
-        "get.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:agent:get",
-        "agent:ace:get",
-        "agent:get:ace",
-        "ace:get:agent",
-        "get:ace:agent",
-        "get:agent:ace"
-      ]
-    },
-    "ace:agent:list": {
-      "aliases": [],
-      "args": {},
-      "description": "GET /services/data/v{version}/ssot/agentic/agents\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org  --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "required": true,
-          "summary": "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "limit": {
-          "name": "limit",
-          "required": false,
-          "summary": "Maximum agents per page (1–200).",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "offset": {
-          "name": "offset",
-          "required": false,
-          "summary": "Agent list offset (zero or greater).",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "filters": {
-          "name": "filters",
-          "required": false,
-          "summary": "Agent Configuration filter expression.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "order-by": {
-          "name": "order-by",
-          "required": false,
-          "summary": "Agent Configuration ordering direction.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "options": [
-            "ASC",
-            "DESC"
-          ],
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:agent:list",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "List ACE agent registrations.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "agent",
-        "list.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:agent:list",
-        "agent:ace:list",
-        "agent:list:ace",
-        "ace:list:agent",
-        "list:ace:agent",
-        "list:agent:ace"
-      ]
-    },
-    "ace:conversation:close": {
-      "aliases": [],
-      "args": {},
-      "description": "POST /api/v1/agentic/conversations/{conversationId}/close\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --dry-run --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "allow-write": {
-          "name": "allow-write",
-          "summary": "Explicitly enable this mutation; confirmation is also required.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "no-prompt": {
-          "name": "no-prompt",
-          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "confirm": {
-          "dependsOn": [
-            "no-prompt"
-          ],
-          "name": "confirm",
-          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": true,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "conversation-id": {
-          "name": "conversation-id",
-          "required": true,
-          "summary": "Conversation identifier.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:conversation:close",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Submit a request to close a conversation.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "conversation",
-        "close.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:conversation:close",
-        "conversation:ace:close",
-        "conversation:close:ace",
-        "ace:close:conversation",
-        "close:ace:conversation",
-        "close:conversation:ace"
-      ]
-    },
-    "ace:conversation:create": {
-      "aliases": [],
-      "args": {},
-      "description": "POST /api/v1/agentic/conversations\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --body-file request.json --dry-run --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "body-file": {
-          "char": "f",
-          "name": "body-file",
-          "required": true,
-          "summary": "JSON request body file; use - to read standard input.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "allow-write": {
-          "name": "allow-write",
-          "summary": "Explicitly enable this mutation; confirmation is also required.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "no-prompt": {
-          "name": "no-prompt",
-          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "confirm": {
-          "dependsOn": [
-            "no-prompt"
-          ],
-          "name": "confirm",
-          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": true,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:conversation:create",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Create a conversation for an authorized owner.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "conversation",
-        "create.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:conversation:create",
-        "conversation:ace:create",
-        "conversation:create:ace",
-        "ace:create:conversation",
-        "create:ace:conversation",
-        "create:conversation:ace"
-      ]
-    },
-    "ace:conversation:get": {
-      "aliases": [],
-      "args": {},
-      "description": "GET /api/v1/agentic/conversations/{conversationId}\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": true,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "conversation-id": {
-          "name": "conversation-id",
-          "required": true,
-          "summary": "Conversation identifier.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "owner-id": {
-          "name": "owner-id",
-          "required": true,
-          "summary": "Authorized conversation owner identifier; does not replace bearer identity.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "owner-type": {
-          "name": "owner-type",
-          "required": false,
-          "summary": "Conversation owner type.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "options": [
-            "individual",
-            "employee"
-          ],
-          "type": "option"
-        },
-        "session-id": {
-          "name": "session-id",
-          "required": false,
-          "summary": "Session identifier.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "participant-id": {
-          "name": "participant-id",
-          "required": false,
-          "summary": "Participant filter.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "scope": {
-          "name": "scope",
-          "required": false,
-          "summary": "Conversation content scope.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "options": [
-            "messages",
-            "traces",
-            "all"
-          ],
-          "type": "option"
-        },
-        "page-token": {
-          "name": "page-token",
-          "required": false,
-          "summary": "Continuation token; preserve the original identity, filters, and scope.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:conversation:get",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Retrieve a conversation data graph.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "conversation",
-        "get.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:conversation:get",
-        "conversation:ace:get",
-        "conversation:get:ace",
-        "ace:get:conversation",
-        "get:ace:conversation",
-        "get:conversation:ace"
-      ]
-    },
-    "ace:conversation:list": {
-      "aliases": [],
-      "args": {},
-      "description": "GET /api/v1/agentic/conversations\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type individual --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": true,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "owner-id": {
-          "name": "owner-id",
-          "required": true,
-          "summary": "Authorized conversation owner identifier; does not replace bearer identity.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "owner-type": {
-          "name": "owner-type",
-          "required": true,
-          "summary": "Conversation owner type.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "options": [
-            "individual",
-            "employee"
-          ],
-          "type": "option"
-        },
-        "status": {
-          "name": "status",
-          "required": false,
-          "summary": "Conversation or session status filter.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "time-range": {
-          "name": "time-range",
-          "required": false,
-          "summary": "Tenant-supported time range expression; its grammar is not published.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "fields": {
-          "name": "fields",
-          "required": false,
-          "summary": "Projection field; repeat the flag for multiple fields.",
-          "hasDynamicHelp": false,
-          "multiple": true,
-          "type": "option"
-        },
-        "participant-id": {
-          "name": "participant-id",
-          "required": false,
-          "summary": "Participant filter.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "page-token": {
-          "name": "page-token",
-          "required": false,
-          "summary": "Continuation token; preserve the original identity, filters, and scope.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:conversation:list",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "List conversations for an authorized owner.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "conversation",
-        "list.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:conversation:list",
-        "conversation:ace:list",
-        "conversation:list:ace",
-        "ace:list:conversation",
-        "list:ace:conversation",
-        "list:conversation:ace"
-      ]
-    },
-    "ace:entry:add": {
-      "aliases": [],
-      "args": {},
-      "description": "POST /api/v1/agentic/conversations/{conversationId}/entries\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --body-file request.json --dry-run --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "body-file": {
-          "char": "f",
-          "name": "body-file",
-          "required": true,
-          "summary": "JSON request body file; use - to read standard input.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "allow-write": {
-          "name": "allow-write",
-          "summary": "Explicitly enable this mutation; confirmation is also required.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "no-prompt": {
-          "name": "no-prompt",
-          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "confirm": {
-          "dependsOn": [
-            "no-prompt"
-          ],
-          "name": "confirm",
-          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": true,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "conversation-id": {
-          "name": "conversation-id",
-          "required": true,
-          "summary": "Conversation identifier.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:entry:add",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Add messages, traces, or entries to a conversation.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "entry",
-        "add.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:entry:add",
-        "entry:ace:add",
-        "entry:add:ace",
-        "ace:add:entry",
-        "add:ace:entry",
-        "add:entry:ace"
-      ]
-    },
-    "ace:memory:create": {
-      "aliases": [],
-      "args": {},
-      "description": "POST /api/v1/agentic/memory\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --body-file request.json --dry-run --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "body-file": {
-          "char": "f",
-          "name": "body-file",
-          "required": true,
-          "summary": "JSON request body file; use - to read standard input.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "allow-write": {
-          "name": "allow-write",
-          "summary": "Explicitly enable this mutation; confirmation is also required.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "no-prompt": {
-          "name": "no-prompt",
-          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "confirm": {
-          "dependsOn": [
-            "no-prompt"
-          ],
-          "name": "confirm",
-          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "profile-id": {
-          "name": "profile-id",
-          "required": true,
-          "summary": "Authorized memory profile identifier.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "profile-type": {
-          "name": "profile-type",
-          "required": true,
-          "summary": "Memory profile type.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "options": [
-            "individual",
-            "employee"
-          ],
-          "type": "option"
-        },
-        "category": {
-          "name": "category",
-          "required": true,
-          "summary": "Exact tenant-supported memory category; no category is inferred.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": false,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:memory:create",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Create memories for an authorized profile.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "memory",
-        "create.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:memory:create",
-        "memory:ace:create",
-        "memory:create:ace",
-        "ace:create:memory",
-        "create:ace:memory",
-        "create:memory:ace"
-      ]
-    },
-    "ace:memory:delete": {
-      "aliases": [],
-      "args": {},
-      "description": "DELETE /api/v1/agentic/memory\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --body-file request.json --dry-run --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "body-file": {
-          "char": "f",
-          "name": "body-file",
-          "required": true,
-          "summary": "JSON request body file; use - to read standard input.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "allow-write": {
-          "name": "allow-write",
-          "summary": "Explicitly enable this mutation; confirmation is also required.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "no-prompt": {
-          "name": "no-prompt",
-          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "confirm": {
-          "dependsOn": [
-            "no-prompt"
-          ],
-          "name": "confirm",
-          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "profile-id": {
-          "name": "profile-id",
-          "required": true,
-          "summary": "Authorized memory profile identifier.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "profile-type": {
-          "name": "profile-type",
-          "required": true,
-          "summary": "Memory profile type.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "options": [
-            "individual",
-            "employee"
-          ],
-          "type": "option"
-        },
-        "category": {
-          "name": "category",
-          "required": true,
-          "summary": "Exact tenant-supported memory category; no category is inferred.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": false,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:memory:delete",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Delete explicitly selected memories.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "memory",
-        "delete.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:memory:delete",
-        "memory:ace:delete",
-        "memory:delete:ace",
-        "ace:delete:memory",
-        "delete:ace:memory",
-        "delete:memory:ace"
-      ]
-    },
-    "ace:memory:read": {
-      "aliases": [],
-      "args": {},
-      "description": "GET /api/v1/agentic/memory\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "profile-id": {
-          "name": "profile-id",
-          "required": true,
-          "summary": "Authorized memory profile identifier.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "profile-type": {
-          "name": "profile-type",
-          "required": true,
-          "summary": "Memory profile type.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "options": [
-            "individual",
-            "employee"
-          ],
-          "type": "option"
-        },
-        "category": {
-          "name": "category",
-          "required": true,
-          "summary": "Exact tenant-supported memory category; no category is inferred.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": false,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:memory:read",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Read memories in an explicitly selected profile category.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "memory",
-        "read.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:memory:read",
-        "memory:ace:read",
-        "memory:read:ace",
-        "ace:read:memory",
-        "read:ace:memory",
-        "read:memory:ace"
-      ]
-    },
-    "ace:memory:update": {
-      "aliases": [],
-      "args": {},
-      "description": "POST /api/v1/agentic/memory\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --body-file request.json --dry-run --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "body-file": {
-          "char": "f",
-          "name": "body-file",
-          "required": true,
-          "summary": "JSON request body file; use - to read standard input.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "allow-write": {
-          "name": "allow-write",
-          "summary": "Explicitly enable this mutation; confirmation is also required.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "no-prompt": {
-          "name": "no-prompt",
-          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "confirm": {
-          "dependsOn": [
-            "no-prompt"
-          ],
-          "name": "confirm",
-          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "profile-id": {
-          "name": "profile-id",
-          "required": true,
-          "summary": "Authorized memory profile identifier.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "profile-type": {
-          "name": "profile-type",
-          "required": true,
-          "summary": "Memory profile type.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "options": [
-            "individual",
-            "employee"
-          ],
-          "type": "option"
-        },
-        "category": {
-          "name": "category",
-          "required": true,
-          "summary": "Exact tenant-supported memory category; no category is inferred.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": false,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:memory:update",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Replace memories and return their new identifiers.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "memory",
-        "update.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:memory:update",
-        "memory:ace:update",
-        "memory:update:ace",
-        "ace:update:memory",
-        "update:ace:memory",
-        "update:memory:ace"
-      ]
-    },
-    "ace:participant:add": {
-      "aliases": [],
-      "args": {},
-      "description": "POST /api/v1/agentic/conversations/{conversationId}/sessions/{sessionId}/participants\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
-      "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --session-id EXAMPLE_ID --body-file request.json --dry-run --json"
-      ],
-      "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "body-file": {
-          "char": "f",
-          "name": "body-file",
-          "required": true,
-          "summary": "JSON request body file; use - to read standard input.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "allow-write": {
-          "name": "allow-write",
-          "summary": "Explicitly enable this mutation; confirmation is also required.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "no-prompt": {
-          "name": "no-prompt",
-          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "confirm": {
-          "dependsOn": [
-            "no-prompt"
-          ],
-          "name": "confirm",
-          "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": true,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "conversation-id": {
-          "name": "conversation-id",
-          "required": true,
-          "summary": "Conversation identifier.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "session-id": {
-          "name": "session-id",
-          "required": true,
-          "summary": "Session identifier.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        }
-      },
-      "hasDynamicHelp": true,
-      "hiddenAliases": [],
-      "id": "ace:participant:add",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Add participants to a conversation session.",
-      "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "participant",
-        "add.js"
-      ],
-      "aliasPermutations": [],
-      "permutations": [
-        "ace:participant:add",
-        "participant:ace:add",
-        "participant:add:ace",
-        "ace:add:participant",
-        "add:ace:participant",
-        "add:participant:ace"
-      ]
+      "summary": "Describe ACE commands, parameters, and JSON request schemas without authentication."
     },
     "ace:session:close": {
+      "aliasPermutations": [],
       "aliases": [],
       "args": {},
       "description": "POST /api/v1/agentic/conversations/{conversationId}/sessions/{sessionId}/close\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.",
@@ -2104,123 +2105,110 @@
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --session-id EXAMPLE_ID --dry-run --json"
       ],
       "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
+        "agent-id": {
           "hasDynamicHelp": false,
           "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
-        },
-        "api-version": {
-          "description": "Override the api version used for api requests made by this command",
-          "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Registered ACE agent API name.",
           "type": "option"
         },
         "allow-write": {
+          "allowNo": false,
           "name": "allow-write",
           "summary": "Explicitly enable this mutation; confirmation is also required.",
-          "allowNo": false,
           "type": "boolean"
         },
-        "no-prompt": {
-          "name": "no-prompt",
-          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
-          "allowNo": false,
-          "type": "boolean"
+        "api-version": {
+          "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "api-version",
+          "type": "option"
         },
         "confirm": {
           "dependsOn": [
             "no-prompt"
           ],
+          "hasDynamicHelp": false,
+          "multiple": false,
           "name": "confirm",
           "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": true,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
           "type": "option"
         },
         "conversation-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
           "name": "conversation-id",
           "required": true,
           "summary": "Conversation identifier.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "no-prompt": {
+          "allowNo": false,
+          "name": "no-prompt",
+          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
+          "type": "boolean"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
           "hasDynamicHelp": false,
           "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
           "type": "option"
         },
         "session-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
           "name": "session-id",
           "required": true,
           "summary": "Session identifier.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
           "hasDynamicHelp": false,
           "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
           "type": "option"
         }
       },
       "hasDynamicHelp": true,
       "hiddenAliases": [],
       "id": "ace:session:close",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Submit session closure and trigger memory extraction.",
       "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "session",
-        "close.js"
-      ],
-      "aliasPermutations": [],
       "permutations": [
         "ace:session:close",
         "session:ace:close",
@@ -2228,9 +2216,22 @@
         "ace:close:session",
         "close:ace:session",
         "close:session:ace"
-      ]
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "session",
+        "close.js"
+      ],
+      "strict": true,
+      "summary": "Submit session closure and trigger memory extraction."
     },
     "ace:session:create": {
+      "aliasPermutations": [],
       "aliases": [],
       "args": {},
       "description": "POST /api/v1/agentic/conversations/{conversationId}/sessions\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
@@ -2238,124 +2239,111 @@
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --body-file request.json --dry-run --json"
       ],
       "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
+        "agent-id": {
           "hasDynamicHelp": false,
           "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Registered ACE agent API name.",
           "type": "option"
         },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
-          "type": "option"
+        "allow-write": {
+          "allowNo": false,
+          "name": "allow-write",
+          "summary": "Explicitly enable this mutation; confirmation is also required.",
+          "type": "boolean"
         },
         "api-version": {
           "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
           "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
           "type": "option"
         },
         "body-file": {
           "char": "f",
+          "hasDynamicHelp": false,
+          "multiple": false,
           "name": "body-file",
           "required": true,
           "summary": "JSON request body file; use - to read standard input.",
-          "hasDynamicHelp": false,
-          "multiple": false,
           "type": "option"
-        },
-        "allow-write": {
-          "name": "allow-write",
-          "summary": "Explicitly enable this mutation; confirmation is also required.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "no-prompt": {
-          "name": "no-prompt",
-          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
-          "allowNo": false,
-          "type": "boolean"
         },
         "confirm": {
           "dependsOn": [
             "no-prompt"
           ],
+          "hasDynamicHelp": false,
+          "multiple": false,
           "name": "confirm",
           "summary": "SHA-256 fingerprint of the reviewed dry-run request.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": true,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
           "type": "option"
         },
         "conversation-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
           "name": "conversation-id",
           "required": true,
           "summary": "Conversation identifier.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "no-prompt": {
+          "allowNo": false,
+          "name": "no-prompt",
+          "summary": "Run without a prompt; requires --confirm with this request's dry-run fingerprint.",
+          "type": "boolean"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
           "hasDynamicHelp": false,
           "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
           "type": "option"
         }
       },
       "hasDynamicHelp": true,
       "hiddenAliases": [],
       "id": "ace:session:create",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "Create a conversation session with participants.",
       "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "session",
-        "create.js"
-      ],
-      "aliasPermutations": [],
       "permutations": [
         "ace:session:create",
         "session:ace:create",
@@ -2363,9 +2351,22 @@
         "ace:create:session",
         "create:ace:session",
         "create:session:ace"
-      ]
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "session",
+        "create.js"
+      ],
+      "strict": true,
+      "summary": "Create a conversation session with participants."
     },
     "ace:session:list": {
+      "aliasPermutations": [],
       "aliases": [],
       "args": {},
       "description": "GET /api/v1/agentic/conversations/{conversationId}/sessions\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
@@ -2373,153 +2374,140 @@
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type individual --json"
       ],
       "flags": {
-        "json": {
-          "description": "Format output as json.",
-          "helpGroup": "GLOBAL",
-          "name": "json",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "flags-dir": {
-          "helpGroup": "GLOBAL",
-          "name": "flags-dir",
-          "summary": "Import flag values from a directory.",
+        "agent-id": {
           "hasDynamicHelp": false,
           "multiple": false,
-          "type": "option"
-        },
-        "target-org": {
-          "char": "o",
-          "name": "target-org",
-          "noCacheDefault": true,
-          "summary": "Username or alias of the target org.",
-          "hasDynamicHelp": true,
-          "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Registered ACE agent API name.",
           "type": "option"
         },
         "api-version": {
           "description": "Override the api version used for api requests made by this command",
+          "hasDynamicHelp": false,
+          "multiple": false,
           "name": "api-version",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "dry-run": {
-          "name": "dry-run",
-          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
-          "allowNo": false,
-          "type": "boolean"
-        },
-        "timeout": {
-          "name": "timeout",
-          "summary": "Request timeout in seconds; requests are never automatically retried.",
-          "default": 30,
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "runtime-origin": {
-          "env": "ACE_RUNTIME_ORIGIN",
-          "name": "runtime-origin",
-          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "agent-id": {
-          "name": "agent-id",
-          "required": true,
-          "summary": "Registered ACE agent API name.",
-          "hasDynamicHelp": false,
-          "multiple": false,
           "type": "option"
         },
         "conversation-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
           "name": "conversation-id",
           "required": true,
           "summary": "Conversation identifier.",
-          "hasDynamicHelp": false,
-          "multiple": false,
           "type": "option"
         },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Validate and print the request plan and confirmation fingerprint without making network requests.",
+          "type": "boolean"
+        },
+        "fields": {
+          "hasDynamicHelp": false,
+          "multiple": true,
+          "name": "fields",
+          "required": false,
+          "summary": "Projection field; repeat the flag for multiple fields.",
+          "type": "option"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
         "owner-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
           "name": "owner-id",
           "required": true,
           "summary": "Authorized conversation owner identifier; does not replace bearer identity.",
-          "hasDynamicHelp": false,
-          "multiple": false,
           "type": "option"
         },
         "owner-type": {
-          "name": "owner-type",
-          "required": true,
-          "summary": "Conversation owner type.",
           "hasDynamicHelp": false,
           "multiple": false,
+          "name": "owner-type",
           "options": [
             "individual",
             "employee"
           ],
-          "type": "option"
-        },
-        "status": {
-          "name": "status",
-          "required": false,
-          "summary": "Conversation or session status filter.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "time-range": {
-          "name": "time-range",
-          "required": false,
-          "summary": "Tenant-supported time range expression; its grammar is not published.",
-          "hasDynamicHelp": false,
-          "multiple": false,
-          "type": "option"
-        },
-        "fields": {
-          "name": "fields",
-          "required": false,
-          "summary": "Projection field; repeat the flag for multiple fields.",
-          "hasDynamicHelp": false,
-          "multiple": true,
-          "type": "option"
-        },
-        "participant-id": {
-          "name": "participant-id",
-          "required": false,
-          "summary": "Participant filter.",
-          "hasDynamicHelp": false,
-          "multiple": false,
+          "required": true,
+          "summary": "Conversation owner type.",
           "type": "option"
         },
         "page-token": {
+          "hasDynamicHelp": false,
+          "multiple": false,
           "name": "page-token",
           "required": false,
           "summary": "Continuation token; preserve the original identity, filters, and scope.",
+          "type": "option"
+        },
+        "participant-id": {
           "hasDynamicHelp": false,
           "multiple": false,
+          "name": "participant-id",
+          "required": false,
+          "summary": "Participant filter.",
+          "type": "option"
+        },
+        "runtime-origin": {
+          "env": "ACE_RUNTIME_ORIGIN",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "runtime-origin",
+          "summary": "Verified runtime HTTPS origin, paired with ACE_RUNTIME_TOKEN; otherwise exchange the target org grant.",
+          "type": "option"
+        },
+        "status": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "status",
+          "required": false,
+          "summary": "Conversation or session status filter.",
+          "type": "option"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "summary": "Username or alias of the target org.",
+          "type": "option"
+        },
+        "time-range": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "time-range",
+          "required": false,
+          "summary": "Tenant-supported time range expression; its grammar is not published.",
+          "type": "option"
+        },
+        "timeout": {
+          "default": 30,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "timeout",
+          "summary": "Request timeout in seconds; requests are never automatically retried.",
           "type": "option"
         }
       },
       "hasDynamicHelp": true,
       "hiddenAliases": [],
       "id": "ace:session:list",
-      "pluginAlias": "@anushdsouza/sf-plugin-ace",
-      "pluginName": "@anushdsouza/sf-plugin-ace",
-      "pluginType": "core",
-      "strict": true,
-      "summary": "List sessions in an authorized conversation.",
       "isESM": true,
-      "relativePath": [
-        "lib",
-        "commands",
-        "ace",
-        "session",
-        "list.js"
-      ],
-      "aliasPermutations": [],
       "permutations": [
         "ace:session:list",
         "session:ace:list",
@@ -2527,7 +2515,19 @@
         "ace:list:session",
         "list:ace:session",
         "list:session:ace"
-      ]
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "session",
+        "list.js"
+      ],
+      "strict": true,
+      "summary": "List sessions in an authorized conversation."
     }
   },
   "version": "0.1.0-beta.1"

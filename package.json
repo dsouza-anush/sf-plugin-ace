@@ -38,7 +38,7 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json && oclif manifest .",
+    "build": "tsc -p tsconfig.json && oclif manifest . && node scripts/normalize-manifest.mjs",
     "check": "npm run build && npm run lint && npm run format:check && npm test",
     "lint": "eslint src",
     "test": "node --test test/*.test.mjs",

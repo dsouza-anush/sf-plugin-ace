@@ -16,6 +16,7 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm ci
       - run: npm run release:check
+      - run: git diff --exit-code -- oclif.manifest.json
   salesforce-host:
     runs-on: ubuntu-latest
     timeout-minutes: 20
