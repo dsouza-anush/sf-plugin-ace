@@ -1,0 +1,95 @@
+{
+  "name": "@anushdsouza/sf-plugin-ace",
+  "version": "0.1.0-beta.1",
+  "description": "Agent Context Engine commands for Salesforce CLI",
+  "type": "module",
+  "engines": {
+    "node": "^22.19.0 || ^24.0.0"
+  },
+  "bin": {
+    "sf-plugin-ace": "bin/run.js"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/messages",
+    "/oclif.manifest.json",
+    "/npm-shrinkwrap.json",
+    "/README.md",
+    "/LICENSE",
+    "/NOTICE",
+    "/SECURITY.md",
+    "/CHANGELOG.md",
+    "/docs/API-COVERAGE.md",
+    "/docs/COMMANDS.md",
+    "/docs/DISCOVERY.md",
+    "/docs/RELEASE.md",
+    "/docs/LIVE-VERIFICATION.md"
+  ],
+  "oclif": {
+    "bin": "sf",
+    "commands": "./lib/commands",
+    "topicSeparator": " ",
+    "flexibleTaxonomy": true,
+    "topics": {
+      "ace": {
+        "description": "Manage Agent Context Engine configuration, conversations, memory, and context."
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && oclif manifest .",
+    "check": "npm run build && npm run lint && npm run format:check && npm test",
+    "lint": "eslint src",
+    "test": "node --test test/*.test.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "prepack": "node scripts/prepack.mjs",
+    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.mjs\" \"scripts/**/*.mjs\" eslint.config.js",
+    "release:check": "npm run check && npm run smoke && npm run public:check && npm audit --omit=dev --audit-level=high",
+    "public:check": "node scripts/release-boundary.mjs",
+    "release:export": "node scripts/export-release.mjs",
+    "release:tag:check": "node scripts/release-tag.mjs",
+    "live:verify": "node scripts/live-verify.mjs"
+  },
+  "dependencies": {
+    "@oclif/core": "^5.0.0",
+    "@salesforce/core": "^9.1.9",
+    "@salesforce/sf-plugins-core": "^13.0.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@salesforce/prettier-config": "^0.0.4",
+    "@types/node": "^24.19.1",
+    "eslint": "^9.0.0",
+    "eslint-plugin-sf-plugin": "^3.0.1",
+    "prettier": "^3.9.9",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.0.0",
+    "oclif": "^4.23.27"
+  },
+  "prettier": "@salesforce/prettier-config",
+  "license": "MIT",
+  "author": "Anush D'Souza",
+  "keywords": [
+    "salesforce",
+    "salesforce-cli",
+    "sf-plugin",
+    "agent-context-engine",
+    "agentic-memory",
+    "oclif"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dsouza-anush/sf-plugin-ace.git"
+  },
+  "homepage": "https://github.com/dsouza-anush/sf-plugin-ace#readme",
+  "bugs": {
+    "url": "https://github.com/dsouza-anush/sf-plugin-ace/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "tag": "beta"
+  }
+}

@@ -1,0 +1,9 @@
+node_modules/
+lib/
+*.tgz
+coverage/
+.env*
+.npmrc
+.sf/
+.sfdx/
+.DS_Store

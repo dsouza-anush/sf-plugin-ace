@@ -1,0 +1,50 @@
+name: publish
+on:
+  release:
+    types: [published]
+permissions:
+  contents: read
+concurrency:
+  group: npm-publish-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: npm ci
+      - run: npm run release:tag:check
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+      - run: git merge-base --is-ancestor HEAD origin/main
+      - run: npm run release:check
+      - run: npm pack --pack-destination /tmp
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: npm-package
+          path: /tmp/anushdsouza-sf-plugin-ace-*.tgz
+          retention-days: 1
+          if-no-files-found: error
+  npm:
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: npm-package
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          registry-url: https://registry.npmjs.org
+      - run: npm publish ./anushdsouza-sf-plugin-ace-*.tgz --access public --tag beta --provenance

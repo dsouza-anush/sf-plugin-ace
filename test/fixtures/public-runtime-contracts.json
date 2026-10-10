@@ -1,0 +1,1252 @@
+{
+  "collectedAt": "2026-10-09T08:33:12.681043+00:00",
+  "scope": "Technical field tables for all 14 public runtime operations. Not a complete machine-readable schema or tenant verification.",
+  "operations": [
+    {
+      "route": "/api/context/get",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-get-context.html",
+      "sourceHash": "9a0ad049be7c0d544c1196498e0741b31b0218fe4201a8f96658b8adb111da10",
+      "method": "GET",
+      "path": "/api/v1/agentic/context",
+      "tables": {
+        "Query Parameters": [
+          {
+            "Parameter": "agent_id",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "conversation_id",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "owner_id",
+            "Type": "String",
+            "Required": "No"
+          },
+          {
+            "Parameter": "owner_type",
+            "Type": "String",
+            "Required": "Conditional"
+          },
+          {
+            "Parameter": "mode",
+            "Type": "String",
+            "Required": "No"
+          },
+          {
+            "Parameter": "latency_sensitivity",
+            "Type": "String",
+            "Required": "No"
+          },
+          {
+            "Parameter": "token_budget",
+            "Type": "Integer",
+            "Required": "No"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "contextId",
+            "Type": "String"
+          },
+          {
+            "Field": "sessionId",
+            "Type": "String"
+          },
+          {
+            "Field": "createdAt",
+            "Type": "String (ISO 8601)"
+          },
+          {
+            "Field": "userContext",
+            "Type": "Array"
+          },
+          {
+            "Field": "userContext[].entry",
+            "Type": "String"
+          },
+          {
+            "Field": "userContext[].sourceType",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "400"
+          },
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "200 OK"
+    },
+    {
+      "route": "/api/conversations/add-entries",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-add-entries.html",
+      "sourceHash": "0ee2d71ae96ba76ed18339e018e0be35ff298d2f603c9d626f22277e7616db3f",
+      "method": "POST",
+      "path": "/api/v1/agentic/conversations/{conversationId}/entries",
+      "tables": {
+        "Path Parameters": [
+          {
+            "Parameter": "conversationId",
+            "Required": "Yes"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          },
+          {
+            "Header": "agent_id",
+            "Required": "Yes"
+          }
+        ],
+        "Request Body Schema": [
+          {
+            "Field": "sessionId",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "entries",
+            "Type": "Array",
+            "Required": "Yes"
+          },
+          {
+            "Field": "entries[].id",
+            "Type": "String",
+            "Required": "No"
+          },
+          {
+            "Field": "entries[].interactionId",
+            "Type": "String",
+            "Required": "No"
+          },
+          {
+            "Field": "entries[].participantId",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "entries[].content",
+            "Type": "String",
+            "Required": "Conditional"
+          },
+          {
+            "Field": "entries[].type",
+            "Type": "String",
+            "Required": "No"
+          },
+          {
+            "Field": "entries[].role",
+            "Type": "String",
+            "Required": "No"
+          },
+          {
+            "Field": "entries[].timestamp",
+            "Type": "String (ISO 8601)",
+            "Required": "No"
+          },
+          {
+            "Field": "entries[].category",
+            "Type": "String",
+            "Required": "No"
+          },
+          {
+            "Field": "entries[].attachments",
+            "Type": "Array",
+            "Required": "No"
+          },
+          {
+            "Field": "entries[].variable",
+            "Type": "Map",
+            "Required": "No"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "statusCode",
+            "Type": "String"
+          },
+          {
+            "Field": "conversationId",
+            "Type": "String"
+          },
+          {
+            "Field": "sessionId",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "400"
+          },
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "404"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "202 Accepted"
+    },
+    {
+      "route": "/api/conversations/add-participants",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-add-participants.html",
+      "sourceHash": "b648f1c4034294509c58db683412ef069219c0e117508be2f16e6ac81a9e1ef3",
+      "method": "POST",
+      "path": "/api/v1/agentic/conversations/{conversationId}/sessions/{sessionId}/participants",
+      "tables": {
+        "Path Parameters": [
+          {
+            "Parameter": "conversationId",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "sessionId",
+            "Required": "Yes"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          },
+          {
+            "Header": "agent_id",
+            "Required": "Yes"
+          }
+        ],
+        "Request Body Schema": [
+          {
+            "Field": "participants",
+            "Type": "Array",
+            "Required": "Yes"
+          },
+          {
+            "Field": "participants[].id",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "participants[].type",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "participants[].role",
+            "Type": "String",
+            "Required": "Yes"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "statusCode",
+            "Type": "String"
+          },
+          {
+            "Field": "conversationId",
+            "Type": "String"
+          },
+          {
+            "Field": "sessionId",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "400"
+          },
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "404"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "202 Accepted"
+    },
+    {
+      "route": "/api/conversations/close-session",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-close-session.html",
+      "sourceHash": "ec5add7dea833591044ab53246d967e60e2bfe09ede5e67c881db702e1ed8982",
+      "method": "POST",
+      "path": "/api/v1/agentic/conversations/{conversationId}/sessions/{sessionId}/close",
+      "tables": {
+        "Path Parameters": [
+          {
+            "Parameter": "conversationId",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "sessionId",
+            "Required": "Yes"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          },
+          {
+            "Header": "agent_id",
+            "Required": "Yes"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "statusCode",
+            "Type": "String"
+          },
+          {
+            "Field": "conversationId",
+            "Type": "String"
+          },
+          {
+            "Field": "sessionId",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "404"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "202 Accepted"
+    },
+    {
+      "route": "/api/conversations/close",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-close-conversation.html",
+      "sourceHash": "133e70187be36ff4f1fa9ce91d8206f2a3837f0a6856645a9c314fd1c4a0faf8",
+      "method": "POST",
+      "path": "/api/v1/agentic/conversations/{conversationId}/close",
+      "tables": {
+        "Path Parameters": [
+          {
+            "Parameter": "conversationId",
+            "Required": "Yes"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          },
+          {
+            "Header": "agent_id",
+            "Required": "Yes"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "statusCode",
+            "Type": "String"
+          },
+          {
+            "Field": "conversationId",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "404"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "202 Accepted"
+    },
+    {
+      "route": "/api/conversations/create-session",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-create-session.html",
+      "sourceHash": "f452c6cf99b6c15e6068893ce1194232b0f88dc66bfc963dca7abf1a2727eea6",
+      "method": "POST",
+      "path": "/api/v1/agentic/conversations/{conversationId}/sessions",
+      "tables": {
+        "Path Parameters": [
+          {
+            "Parameter": "conversationId",
+            "Required": "Yes"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          },
+          {
+            "Header": "agent_id",
+            "Required": "Yes"
+          }
+        ],
+        "Request Body Schema": [
+          {
+            "Field": "sessionId",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "conversationOwnerId",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "ownerType",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "participants",
+            "Type": "Array",
+            "Required": "Yes"
+          },
+          {
+            "Field": "participants[].id",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "participants[].type",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "participants[].role",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "participants[].startTime",
+            "Type": "String (ISO 8601)",
+            "Required": "No"
+          },
+          {
+            "Field": "participants[].endTime",
+            "Type": "String (ISO 8601)",
+            "Required": "No"
+          },
+          {
+            "Field": "participants[].orgId",
+            "Type": "String",
+            "Required": "No"
+          },
+          {
+            "Field": "variable",
+            "Type": "Map",
+            "Required": "No"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "statusCode",
+            "Type": "String"
+          },
+          {
+            "Field": "conversationId",
+            "Type": "String"
+          },
+          {
+            "Field": "sessionId",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "400"
+          },
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "404"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "201 Created"
+    },
+    {
+      "route": "/api/conversations/create",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-create-conversation.html",
+      "sourceHash": "c305b4091e34cd2dc6d0340bdb98d2e9229411f6688d20759e302df9e99a9fe3",
+      "method": "POST",
+      "path": "/api/v1/agentic/conversations",
+      "tables": {
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          },
+          {
+            "Header": "agent_id",
+            "Required": "Yes"
+          },
+          {
+            "Header": "Content-Type",
+            "Required": "Yes"
+          }
+        ],
+        "Request Body Schema": [
+          {
+            "Field": "conversationId",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "conversationOwnerId",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "ownerType",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "name",
+            "Type": "String",
+            "Required": "No"
+          },
+          {
+            "Field": "channel",
+            "Type": "Object",
+            "Required": "No"
+          },
+          {
+            "Field": "variable",
+            "Type": "Map",
+            "Required": "No"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "statusCode",
+            "Type": "String"
+          },
+          {
+            "Field": "conversationId",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "400"
+          },
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "201 Created"
+    },
+    {
+      "route": "/api/conversations/get",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-get-conversation-data-graph.html",
+      "sourceHash": "8ae8c7d9f3fc6de0abb98d8146c4b99dea62124ca7b133018dbff0bcacd67f4d",
+      "method": "GET",
+      "path": "/api/v1/agentic/conversations/{conversationId}",
+      "tables": {
+        "Path Parameters": [
+          {
+            "Parameter": "conversationId",
+            "Required": "Yes"
+          }
+        ],
+        "Query Parameters": [
+          {
+            "Parameter": "owner_id",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "session_id",
+            "Required": "No"
+          },
+          {
+            "Parameter": "participant_id",
+            "Required": "No"
+          },
+          {
+            "Parameter": "owner_type",
+            "Required": "No"
+          },
+          {
+            "Parameter": "scope",
+            "Required": "No"
+          },
+          {
+            "Parameter": "page_token",
+            "Required": "No"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          },
+          {
+            "Header": "agent_id",
+            "Required": "Yes"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "conversationId",
+            "Type": "String",
+            "Nullable": "No"
+          },
+          {
+            "Field": "name",
+            "Type": "String",
+            "Nullable": "Yes"
+          },
+          {
+            "Field": "status",
+            "Type": "String",
+            "Nullable": "No"
+          },
+          {
+            "Field": "startTime",
+            "Type": "String (ISO 8601)",
+            "Nullable": "No"
+          },
+          {
+            "Field": "endTime",
+            "Type": "String (ISO 8601)",
+            "Nullable": "Yes"
+          },
+          {
+            "Field": "conversationOwnerId",
+            "Type": "String",
+            "Nullable": "No"
+          },
+          {
+            "Field": "sessions",
+            "Type": "Array",
+            "Nullable": "No"
+          },
+          {
+            "Field": "sessions[].sessionId",
+            "Type": "String",
+            "Nullable": "No"
+          },
+          {
+            "Field": "sessions[].status",
+            "Type": "String",
+            "Nullable": "No"
+          },
+          {
+            "Field": "sessions[].startTime",
+            "Type": "String (ISO 8601)",
+            "Nullable": "No"
+          },
+          {
+            "Field": "sessions[].endTime",
+            "Type": "String (ISO 8601)",
+            "Nullable": "Yes"
+          },
+          {
+            "Field": "sessions[].entries",
+            "Type": "Array",
+            "Nullable": "No"
+          },
+          {
+            "Field": "metadata",
+            "Type": "Object",
+            "Nullable": "Yes"
+          },
+          {
+            "Field": "nextPageToken",
+            "Type": "String",
+            "Nullable": "Yes"
+          }
+        ],
+        "Entry Fields": [
+          {
+            "Field": "id",
+            "Type": "String",
+            "Nullable": "No"
+          },
+          {
+            "Field": "interactionId",
+            "Type": "String",
+            "Nullable": "No"
+          },
+          {
+            "Field": "participantId",
+            "Type": "String",
+            "Nullable": "No"
+          },
+          {
+            "Field": "content",
+            "Type": "String",
+            "Nullable": "Yes"
+          },
+          {
+            "Field": "type",
+            "Type": "String",
+            "Nullable": "Yes"
+          },
+          {
+            "Field": "timestamp",
+            "Type": "String (ISO 8601)",
+            "Nullable": "No"
+          },
+          {
+            "Field": "category",
+            "Type": "String",
+            "Nullable": "No"
+          },
+          {
+            "Field": "variable",
+            "Type": "Map",
+            "Nullable": "No"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "400"
+          },
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "404"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "200 OK"
+    },
+    {
+      "route": "/api/conversations/list-sessions",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-list-sessions.html",
+      "sourceHash": "00d1283e676870367bd9a341af508a15b951607668c3a8caa54a0f393a63a87d",
+      "method": "GET",
+      "path": "/api/v1/agentic/conversations/{conversationId}/sessions",
+      "tables": {
+        "Path Parameters": [
+          {
+            "Parameter": "conversationId",
+            "Required": "Yes"
+          }
+        ],
+        "Query Parameters": [
+          {
+            "Parameter": "owner_id",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "owner_type",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "status",
+            "Required": "No"
+          },
+          {
+            "Parameter": "time_range",
+            "Required": "No"
+          },
+          {
+            "Parameter": "fields",
+            "Required": "No"
+          },
+          {
+            "Parameter": "participant_id",
+            "Required": "No"
+          },
+          {
+            "Parameter": "page_token",
+            "Required": "No"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          },
+          {
+            "Header": "agent_id",
+            "Required": "Yes"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "conversationId",
+            "Type": "String"
+          },
+          {
+            "Field": "sessions",
+            "Type": "Array"
+          },
+          {
+            "Field": "sessions[].id",
+            "Type": "String"
+          },
+          {
+            "Field": "sessions[].startTime",
+            "Type": "String (ISO 8601)"
+          },
+          {
+            "Field": "sessions[].status",
+            "Type": "String"
+          },
+          {
+            "Field": "nextPageToken",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "400"
+          },
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "404"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "200 OK"
+    },
+    {
+      "route": "/api/conversations/list",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-list-conversations.html",
+      "sourceHash": "8cbb548550a34506c72dcc93d267593a5d7fbdee02a1ea928e48ffd31f50f1bc",
+      "method": "GET",
+      "path": "/api/v1/agentic/conversations",
+      "tables": {
+        "Query Parameters": [
+          {
+            "Parameter": "owner_id",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "owner_type",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "status",
+            "Required": "No"
+          },
+          {
+            "Parameter": "time_range",
+            "Required": "No"
+          },
+          {
+            "Parameter": "fields",
+            "Required": "No"
+          },
+          {
+            "Parameter": "participant_id",
+            "Required": "No"
+          },
+          {
+            "Parameter": "page_token",
+            "Required": "No"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          },
+          {
+            "Header": "agent_id",
+            "Required": "Yes"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "conversations",
+            "Type": "Array"
+          },
+          {
+            "Field": "conversations[].id",
+            "Type": "String"
+          },
+          {
+            "Field": "conversations[].startTime",
+            "Type": "String (ISO 8601)"
+          },
+          {
+            "Field": "conversations[].status",
+            "Type": "String"
+          },
+          {
+            "Field": "conversations[].name",
+            "Type": "String"
+          },
+          {
+            "Field": "conversations[].modifiedDate",
+            "Type": "String (ISO 8601)"
+          },
+          {
+            "Field": "nextPageToken",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "400"
+          },
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "200 OK"
+    },
+    {
+      "route": "/api/memory/create",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-create-memories.html",
+      "sourceHash": "88c79ef01532f498652aa202c4c918a7c0f6abb6c9d78336cf1c70ef8fb0b0e7",
+      "method": "POST",
+      "path": "/api/v1/agentic/memory",
+      "tables": {
+        "Query Parameters": [
+          {
+            "Parameter": "profile_id",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "profile_type",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "category",
+            "Type": "String",
+            "Required": "Yes"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          },
+          {
+            "Header": "Content-Type",
+            "Required": "Yes"
+          }
+        ],
+        "Request Body Schema": [
+          {
+            "Field": "memories",
+            "Type": "Array",
+            "Required": "Yes"
+          },
+          {
+            "Field": "memories[].content",
+            "Type": "String",
+            "Required": "Yes"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "statusCode",
+            "Type": "String"
+          },
+          {
+            "Field": "memories",
+            "Type": "Array"
+          },
+          {
+            "Field": "memories[].memoryId",
+            "Type": "String"
+          },
+          {
+            "Field": "memories[].content",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "400"
+          },
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "200 OK"
+    },
+    {
+      "route": "/api/memory/delete",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-delete-memories.html",
+      "sourceHash": "8579c76a2be68093ce0317c592108144e8087531751c3e37888a2928505e1661",
+      "method": "DELETE",
+      "path": "/api/v1/agentic/memory",
+      "tables": {
+        "Query Parameters": [
+          {
+            "Parameter": "profile_id",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "profile_type",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "category",
+            "Type": "String",
+            "Required": "Yes"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          },
+          {
+            "Header": "Content-Type",
+            "Required": "Yes"
+          }
+        ],
+        "Request Body Schema": [
+          {
+            "Field": "memories",
+            "Type": "Array",
+            "Required": "Yes"
+          },
+          {
+            "Field": "memories[].memoryId",
+            "Type": "String",
+            "Required": "Yes"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "statusCode",
+            "Type": "String"
+          },
+          {
+            "Field": "memories",
+            "Type": "Array"
+          },
+          {
+            "Field": "memories[].memoryId",
+            "Type": "String"
+          },
+          {
+            "Field": "memories[].content",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "400"
+          },
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "404"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "200 OK"
+    },
+    {
+      "route": "/api/memory/read",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-read-memories.html",
+      "sourceHash": "8f6b763457c07b0a704878c3613c70333d107717ea6e38eb738b84135e908294",
+      "method": "GET",
+      "path": "/api/v1/agentic/memory",
+      "tables": {
+        "Query Parameters": [
+          {
+            "Parameter": "profile_id",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "profile_type",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "category",
+            "Type": "String",
+            "Required": "Yes"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "memories",
+            "Type": "Array"
+          },
+          {
+            "Field": "memories[].memoryId",
+            "Type": "String"
+          },
+          {
+            "Field": "memories[].content",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "400"
+          },
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "200 OK"
+    },
+    {
+      "route": "/api/memory/update",
+      "url": "https://developer.salesforce.com/docs/data/agentic-memory-context/references/agentic-memory-context-api-ref/agentic-memory-api-update-memories.html",
+      "sourceHash": "d567e7e760af92857661bfc3ad134fc51e44f3132aa2df39e16f8ec7dbe435a3",
+      "method": "POST",
+      "path": "/api/v1/agentic/memory",
+      "tables": {
+        "Query Parameters": [
+          {
+            "Parameter": "profile_id",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "profile_type",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Parameter": "category",
+            "Type": "String",
+            "Required": "Yes"
+          }
+        ],
+        "Request Headers": [
+          {
+            "Header": "Authorization",
+            "Required": "Yes"
+          },
+          {
+            "Header": "Content-Type",
+            "Required": "Yes"
+          }
+        ],
+        "Request Body Schema": [
+          {
+            "Field": "memories",
+            "Type": "Array",
+            "Required": "Yes"
+          },
+          {
+            "Field": "memories[].memoryId",
+            "Type": "String",
+            "Required": "Yes"
+          },
+          {
+            "Field": "memories[].content",
+            "Type": "String",
+            "Required": "Yes"
+          }
+        ],
+        "Response Body Schema": [
+          {
+            "Field": "statusCode",
+            "Type": "String"
+          },
+          {
+            "Field": "memories",
+            "Type": "Array"
+          },
+          {
+            "Field": "memories[].memoryId",
+            "Type": "String"
+          },
+          {
+            "Field": "memories[].content",
+            "Type": "String"
+          }
+        ],
+        "Error Codes": [
+          {
+            "Status Code": "400"
+          },
+          {
+            "Status Code": "401"
+          },
+          {
+            "Status Code": "404"
+          },
+          {
+            "Status Code": "500"
+          }
+        ]
+      },
+      "successStatus": "200 OK"
+    }
+  ]
+}
