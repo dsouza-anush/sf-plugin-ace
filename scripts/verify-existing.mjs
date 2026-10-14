@@ -36,29 +36,47 @@ function read(command, flags) {
   });
   return result;
 }
-const graph = read('ace conversation get', [...conv, ...own, '--scope', 'all']);
-const conversations = read('ace conversation list', [...base, ...own]);
+function findInPages(command, flags, matches) {
+  const seen = new Set();
+  let result;
+  for (let page = 0; page < 20; page++) {
+    result = read(command, flags);
+    if (result.status !== 0 || matches(result.result?.data)) return result;
+    const next = result.result?.continuation;
+    if (!next || next.command !== command) return result;
+    const key = JSON.stringify(next.flags);
+    if (seen.has(key)) return result;
+    seen.add(key);
+    flags = Object.entries(next.flags).flatMap(([name, value]) =>
+      (Array.isArray(value) ? value : [value]).flatMap((item) => [`--${name}`, String(item)]),
+    );
+  }
+  return result;
+}
+const hasConversation = (data) =>
+  Array.isArray(data?.conversations) &&
+  data.conversations.some((item) => (item.id ?? item.conversationId) === process.env.ACE_LIVE_CONVERSATION) === true;
+const hasSession = (data) =>
+  Array.isArray(data?.sessions) &&
+  data.sessions.some((item) => (item.id ?? item.sessionId) === process.env.ACE_LIVE_SESSION) === true;
+const graph = findInPages('ace conversation get', [...conv, ...own, '--scope', 'all'], hasSession);
+const conversations = findInPages('ace conversation list', [...base, ...own], hasConversation);
 const sessionSource = process.env.ACE_LIVE_SESSION_SOURCE ?? 'index';
 assert(['index', 'conversation'].includes(sessionSource), 'ACE_LIVE_SESSION_SOURCE must be index or conversation.');
-const sessions = read('ace session list', [...conv, ...own, '--source', sessionSource]);
+const sessions = findInPages('ace session list', [...conv, ...own, '--source', sessionSource], hasSession);
 report.sessionSource = sessionSource;
 const context = read('ace context get', [...conv, ...own, '--mode', 'fast']);
-const targetSession = process.env.ACE_LIVE_SESSION;
-report.assertions.sessionInGraph =
-  graph.status === 0 && graph.result.data.sessions?.some((s) => s.sessionId === targetSession) === true;
-report.assertions.conversationInIndex =
-  conversations.status === 0 &&
-  conversations.result.data.conversations?.some(
-    (c) => (c.id ?? c.conversationId) === process.env.ACE_LIVE_CONVERSATION,
-  ) === true;
-report.assertions.sessionListed =
-  sessions.status === 0 && sessions.result.data.sessions?.some((s) => (s.id ?? s.sessionId) === targetSession) === true;
+report.assertions.sessionInGraph = graph.status === 0 && hasSession(graph.result?.data);
+report.assertions.conversationInIndex = conversations.status === 0 && hasConversation(conversations.result?.data);
+report.assertions.sessionListed = sessions.status === 0 && hasSession(sessions.result?.data);
 report.assertions.contextAssembled =
   context.status === 0 &&
-  typeof context.result.data.contextId === 'string' &&
-  Array.isArray(context.result.data.userContext) &&
-  context.result.data.userContext.length > 0;
-report.sessionState = graph.result?.data?.sessions?.find((s) => s.sessionId === targetSession)?.status;
+  typeof context.result?.data?.contextId === 'string' &&
+  Array.isArray(context.result?.data?.userContext) &&
+  context.result?.data?.userContext.length > 0;
+report.sessionState = Array.isArray(graph.result?.data?.sessions)
+  ? graph.result.data.sessions.find((s) => s.sessionId === process.env.ACE_LIVE_SESSION)?.status
+  : undefined;
 report.complete = report.commands.every((r) => r.exitStatus === 0) && Object.values(report.assertions).every(Boolean);
 if (process.env.ACE_LIVE_REPORT)
   writeFileSync(process.env.ACE_LIVE_REPORT, JSON.stringify(report, null, 2) + '\n', { mode: 0o600 });

@@ -1,6 +1,6 @@
 {
   "name": "@anushdsouza/sf-plugin-ace",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta.4",
   "description": "Agent Context Engine commands for Salesforce CLI",
   "type": "module",
   "engines": {
@@ -33,17 +33,28 @@
     "flexibleTaxonomy": true,
     "topics": {
       "ace": {
-        "description": "Manage Agent Context Engine configuration, conversations, memory, and context."
+        "description": "Manage Agent Context Engine configuration, conversations, memory, and context.",
+        "subtopics": {
+          "agent": { "description": "List, inspect, register, and delete ACE agent registrations." },
+          "context": { "description": "Retrieve assembled ACE context for a conversation." },
+          "conversation": { "description": "List, read, create, and close ACE conversations." },
+          "entry": { "description": "Add messages, traces, or entries to a conversation." },
+          "memory": { "description": "Read, create, update, and delete profile memories." },
+          "participant": { "description": "Add participants to a conversation session." },
+          "session": { "description": "List, create, and close conversation sessions." }
+        }
       }
     }
   },
   "scripts": {
     "build": "tsc -p tsconfig.json && node scripts/build-manifest.mjs",
-    "check": "npm run build && npm run lint && npm run format:check && npm test",
+    "check": "npm run build && npm run lint && npm run format:check && npm run docs:check && npm test",
     "lint": "eslint src",
     "test": "node --test test/*.test.mjs",
     "smoke": "node scripts/smoke.mjs",
-    "prepack": "node scripts/prepack.mjs",
+    "docs": "node scripts/commands-doc.mjs",
+    "docs:check": "node scripts/commands-doc.mjs --check",
+    "prepack": "npm run build",
     "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.mjs\" \"scripts/**/*.mjs\" eslint.config.js",
     "release:check": "npm run check && npm run smoke && npm run public:check && npm audit --audit-level=high",
     "public:check": "node scripts/release-boundary.mjs",

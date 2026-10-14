@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { Messages, SfError } from '@salesforce/core';
-import { bodies, operationFor, type Operation } from './contracts.js';
+import { bodies, DEFAULT_API_VERSION, operationFor, type Operation } from './contracts.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@anushdsouza/sf-plugin-ace', 'client');
@@ -29,6 +29,34 @@ export type Result = {
 };
 export type Session = { origin: string; token: string };
 
+const DETAIL_LIMIT = 300;
+
+/**
+ * Extracts only Salesforce's structured error fields from a failed response: `errorCode`/`message`
+ * (REST), `error`/`error_description` (OAuth), or `title`/`detail` (RFC 9457 problem details).
+ * Raw bodies are never surfaced, the bearer token is redacted, and the detail is capped.
+ */
+export async function errorDetail(response: Response, token: string): Promise<string | undefined> {
+  let value: unknown;
+  try {
+    value = JSON.parse(await response.text()) as unknown;
+  } catch {
+    return undefined;
+  }
+  const first = Array.isArray(value) ? (value[0] as unknown) : value;
+  if (!first || typeof first !== 'object') return undefined;
+  const field = (name: string): string | undefined => {
+    const item = (first as Record<string, unknown>)[name];
+    return typeof item === 'string' && item.trim() ? item : undefined;
+  };
+  const code = field('errorCode') ?? field('error') ?? field('title');
+  const text = field('message') ?? field('error_description') ?? field('detail');
+  if (!code && !text) return undefined;
+  let detail = [code, text].filter(Boolean).join(': ').replace(/\s+/g, ' ').trim();
+  if (token) detail = detail.replaceAll(token, '[redacted]');
+  return detail.length > DETAIL_LIMIT ? `${detail.slice(0, DETAIL_LIMIT - 1)}…` : detail;
+}
+
 export function origin(value: string): string {
   try {
     const url = new URL(value);
@@ -45,7 +73,7 @@ export function planRequest(
   values: Values,
   body: unknown,
   target: string,
-  apiVersion = '68.0',
+  apiVersion = DEFAULT_API_VERSION,
 ): Plan {
   if (!/^\d+\.0$/.test(apiVersion) || Number(apiVersion) < 66)
     throw new SfError(messages.getMessage('errors.api-version'), 'InvalidApiVersion');
@@ -116,7 +144,7 @@ export function planRequest(
   return { ...request, fingerprint: createHash('sha256').update(JSON.stringify(request)).digest('hex') };
 }
 
-export function planSessionProjection(values: Values, target: string, apiVersion = '68.0'): Plan {
+export function planSessionProjection(values: Values, target: string, apiVersion = DEFAULT_API_VERSION): Plan {
   for (const name of ['time-range', 'participant-id']) {
     if (values[name] !== undefined)
       throw new SfError(messages.getMessage('errors.projection-filter', [name]), 'UnsupportedProjectionFilter');
@@ -180,6 +208,39 @@ export function requireWriteApproval(plan: Plan, allow: boolean, confirmed: bool
   if (!confirmed) throw new SfError(messages.getMessage('errors.confirmation'), 'ConfirmationRequired');
 }
 
+function continuationFor(operation: Operation, values: Values, data: unknown): Result['continuation'] {
+  if (!operation.paginated || !data || typeof data !== 'object') return undefined;
+  const flags: Values = {};
+  for (const parameter of operation.parameters)
+    if (values[parameter.name] !== undefined) flags[parameter.name] = values[parameter.name];
+
+  if (operation.command === 'ace agent list') {
+    // Use the returned page boundaries, never an assumed service page size.
+    if (!('agents' in data) || !Array.isArray(data.agents) || data.agents.length === 0) return undefined;
+    if (!('offset' in data) || typeof data.offset !== 'number' || !Number.isSafeInteger(data.offset) || data.offset < 0)
+      return undefined;
+    if (
+      !('limit' in data) ||
+      typeof data.limit !== 'number' ||
+      !Number.isSafeInteger(data.limit) ||
+      data.limit < data.agents.length ||
+      data.limit > 200
+    )
+      return undefined;
+    // totalSize can describe this page rather than the complete collection.
+    // Only a short page establishes completion; an exact final page needs one empty read.
+    if (data.agents.length < data.limit) return undefined;
+    const nextOffset = data.offset + data.agents.length;
+    if (!Number.isSafeInteger(nextOffset)) return undefined;
+    flags.offset = nextOffset;
+    flags.limit = data.limit;
+  } else {
+    if (!('nextPageToken' in data) || typeof data.nextPageToken !== 'string' || !data.nextPageToken) return undefined;
+    flags['page-token'] = data.nextPageToken;
+  }
+  return { command: operation.command, flags };
+}
+
 export class AceTransport {
   public constructor(
     private readonly request: typeof fetch = fetch,
@@ -203,8 +264,17 @@ export class AceTransport {
     } catch {
       throw new SfError(messages.getMessage('errors.exchange'), 'RuntimeAuthFailed');
     }
-    if (!response.ok)
-      throw new SfError(messages.getMessage('errors.exchange-http', [response.status]), 'RuntimeAuthFailed');
+    if (!response.ok) {
+      const detail = await errorDetail(response, session.token);
+      if (detail?.startsWith('invalid_scope'))
+        throw new SfError(messages.getMessage('errors.exchange-scope'), 'RuntimeScopeMissing', [
+          messages.getMessage('actions.exchange-scope'),
+        ]);
+      throw new SfError(
+        messages.getMessage('errors.exchange-http', [response.status + (detail ? ` (${detail})` : '')]),
+        'RuntimeAuthFailed',
+      );
+    }
     try {
       const value: unknown = await response.json();
       if (
@@ -251,14 +321,16 @@ export class AceTransport {
         plan.method === 'GET' ? 'TransportFailed' : 'WriteOutcomeUnknown',
       );
     }
-    if (!response.ok)
+    if (!response.ok) {
+      const detail = await errorDetail(response, session.token);
       throw new SfError(
         messages.getMessage('errors.http', [
-          response.status,
+          response.status + (detail ? ` (${detail})` : ''),
           messages.getMessage(plan.method === 'GET' ? 'errors.read-http' : 'errors.write-http'),
         ]),
         `AceHttp${response.status}`,
       );
+    }
     let data: unknown;
     try {
       const text = await response.text();
@@ -272,9 +344,7 @@ export class AceTransport {
       warnings.push(messages.getMessage('warnings.projection'));
     }
     if (response.status === 202) warnings.push(messages.getMessage('warnings.accepted'));
-    if (operation.command === 'ace agent create') warnings.push(messages.getMessage('warnings.registration'));
-    if (operation.command === 'ace context get') warnings.push(messages.getMessage('warnings.fast-mode'));
-    if (operation.command === 'ace memory update') warnings.push(messages.getMessage('warnings.memory-update'));
+    if (operation.warning) warnings.push(messages.getMessage(operation.warning));
     const result: Result = {
       operation: plan.command,
       ...(plan.sessionProjection ? { source: 'conversation' as const } : {}),
@@ -283,20 +353,8 @@ export class AceTransport {
       data,
       warnings,
     };
-    if (
-      operation.paginated &&
-      data &&
-      typeof data === 'object' &&
-      'nextPageToken' in data &&
-      typeof data.nextPageToken === 'string' &&
-      data.nextPageToken
-    ) {
-      const flags: Values = {};
-      for (const parameter of operation.parameters)
-        if (values[parameter.name] !== undefined) flags[parameter.name] = values[parameter.name];
-      flags['page-token'] = data.nextPageToken;
-      result.continuation = { command: plan.command, flags };
-    }
+    const continuation = continuationFor(operation, values, data);
+    if (continuation) result.continuation = continuation;
     return result;
   }
 }

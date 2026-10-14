@@ -4,7 +4,9 @@ import { z } from 'zod';
 import { bodies, operations, operationFor } from '../../contracts.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
-const messages = Messages.loadMessages('@anushdsouza/sf-plugin-ace', 'schema');
+const bundle = (name: string) => Messages.loadMessages('@anushdsouza/sf-plugin-ace', name);
+const messages = bundle('schema');
+const clientMessages = bundle('client');
 
 export default class Schema extends SfCommand<Record<string, unknown>> {
   public static readonly state = 'beta';
@@ -22,7 +24,12 @@ export default class Schema extends SfCommand<Record<string, unknown>> {
     const { flags } = await this.parse(Schema);
     const selected = flags.command ? [operationFor(flags.command)] : operations;
     const result = {
-      operations: selected.map((op) => ({ ...op, bodySchema: op.body ? z.toJSONSchema(bodies[op.body]) : undefined })),
+      operations: selected.map((op) => ({
+        ...op,
+        summary: bundle(op.command.replaceAll(' ', '.')).getMessage('summary'),
+        warning: op.warning ? clientMessages.getMessage(op.warning) : undefined,
+        bodySchema: op.body ? z.toJSONSchema(bodies[op.body]) : undefined,
+      })),
       note: messages.getMessage('note'),
     };
     if (!this.jsonEnabled()) this.logJson(result);

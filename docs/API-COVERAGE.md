@@ -54,7 +54,7 @@ Request support includes registration name/label/description/data space/profile 
 | Category discovery and time-range grammar | Category listing and filter grammar absent from verified pages | Operator supplies exact supported category/expression | Publish category/metadata discovery and a formal filter grammar with examples. |
 | Context source completeness and hard token limits | Active registration does not ensure every graph is ready; fast-mode budgeting controls are ineffective | Preserve upstream warnings and context provenance; apply explicitly local downstream limits if needed | Add source-level availability, completeness, and supported server-side budget contracts. |
 | Historical browser-local drafts | They live in browser storage and have no server read API | Export them deliberately before any local processing | Add a versioned local import/export format; keep it separate from Salesforce writes. |
-| Zero-touch authentication and security setup | Permissions, licensing, connected/external-client apps, and identity governance must already be authorized | Supported `sf org login` automation plus independently approved secrets and org policy | Document administrator-owned bootstrap separately; ordinary CLI checks must not change security settings. |
+| Initial authorization and org prerequisites | A trusted administrator connection, Data 360 licensing, user permissions, and an ACTIVE agent must already exist | `sf ace setup` explicitly provisions a dedicated JWT ECA and preauthorization permission set, authenticates headlessly, and verifies an employee runtime read | Credential rotation, tenant provisioning and external-customer identity remain separate administrator workflows. |
 | One-command orchestration and auto-pagination | Plugin currently exposes atomic operations and explicit continuation | Shell/CI orchestration using JSON, bounded loops, and read-back | Add resumable workflow helpers only with durable receipts, explicit identity/filters, bounds, and safe reconciliation. |
 
 ## Evidence boundaries
@@ -70,3 +70,10 @@ Sources: [Connect Agent Configuration](https://developer.salesforce.com/docs/dat
 Context requests include `ctx-agent-id` with the same validated API name as the published `agent_id` query parameter. A controlled live probe returned 403 without this header and 200 with it. This observed requirement is absent from the inspected public operation page.
 
 `ace session list --source conversation` explicitly reads the published conversation graph and projects real session summaries, including closed sessions omitted by the verified native index. It supports status and id/startTime/status fields, preserves missing fields and pagination, and rejects participant/time-range filters. It retrieves history before projecting summaries and can cost more than index reads. Default `--source index` preserves the native endpoint and its outcomes.
+
+
+## October 12 pagination and ordering verification
+
+Agent listing now emits offset-based continuation after a full page. Live verification walked seven pages and matched the complete registration inventory. The response's `totalSize` described each page, not the full inventory, so it is not used as a global completion bound. Callers must bound their loops; an exactly full final page can require an additional empty read.
+
+The published `orderBy=ASC` request returned HTTP 400 (`INVALID_BATCH_REQUEST`) in the verified org. The identical read without ordering returned 200. The CLI retains the published parameter without silently rewriting or dropping it. Omit `--order-by` for that environment; a supported ordering contract or provider correction is needed before explicit ordering can be called verified.

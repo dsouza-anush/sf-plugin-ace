@@ -138,7 +138,7 @@ for (const [command, method, path] of cases)
     assert.equal(result.data.unexpectedFutureField, 42);
     assert.deepEqual(result.data.warnings, ['partial graph']);
     assert.equal(result.state, result.httpStatus === 202 ? 'accepted' : 'responded');
-    if (op.paginated) {
+    if (op.paginated && command !== 'ace agent list') {
       assert.equal(result.continuation.flags['page-token'], 'page-2');
       assert.equal(result.continuation.flags['owner-id'], 'owner');
       assert.equal(result.continuation.flags['agent-id'], 'agent/one');
@@ -164,6 +164,16 @@ test('all 14 runtime method/path pairs and parameters match independent publishe
         );
     }
   }
+});
+
+test('agent body accepts the memory generation flag that registrations report', () => {
+  const op = operationFor('ace agent create');
+  const body = {
+    ...payloads.agent,
+    configuration: { ...payloads.agent.configuration, isMemoryGenerationEnabled: true },
+  };
+  assert.equal(planRequest(op, {}, body, 'target').body.configuration.isMemoryGenerationEnabled, true);
+  assert.throws(() => planRequest(op, {}, { ...body, configuration: { isMemoryGenerationEnabled: 'yes' } }, 'target'));
 });
 
 test('body validation catches missing payloads and rejects unknown fields', () => {
@@ -220,7 +230,69 @@ test('writes require both enablement and confirmation, with target/body-bound fi
   );
 });
 
-test('transport errors never expose tokens or upstream bodies and never retry', async () => {
+test('transport errors surface only structured Salesforce fields, redact tokens, and cap length', async () => {
+  const op = operationFor('ace agent get'),
+    plan = planRequest(op, { 'agent-id': 'missing' }, undefined, 'target');
+  const fail = (body, status = 500) =>
+    new AceTransport(async () => new Response(body, { status })).execute(
+      plan,
+      { origin: 'https://tenant.example', token: 'secret-token' },
+      op,
+      {},
+    );
+  await assert.rejects(
+    fail(
+      JSON.stringify([{ errorCode: 'INTERNAL_ERROR', message: 'Agent Context not found for agentApiName: missing' }]),
+    ),
+    (error) =>
+      error.name === 'AceHttp500' &&
+      error.message.includes('(INTERNAL_ERROR: Agent Context not found for agentApiName: missing)'),
+  );
+  await assert.rejects(
+    fail(JSON.stringify({ errorCode: 'X', message: 'echo secret-token', extra: 'tenant data' }), 400),
+    (error) =>
+      error.message.includes('[redacted]') &&
+      !error.message.includes('secret-token') &&
+      !error.message.includes('tenant data'),
+  );
+  await assert.rejects(
+    fail(
+      JSON.stringify({
+        type: 'about:blank',
+        title: 'Bad Request',
+        status: 400,
+        detail: 'unknown agent_id',
+        instance: '/x',
+      }),
+      400,
+    ),
+    (error) => error.message.includes('(Bad Request: unknown agent_id)') && !error.message.includes('about:blank'),
+  );
+  await assert.rejects(
+    fail(JSON.stringify({ message: 'x'.repeat(1000) })),
+    (error) => error.message.length < 500 && error.message.includes('…'),
+  );
+});
+
+test('exchange explains a missing cdp_query_api scope and surfaces other OAuth errors', async () => {
+  const exchange = (body, status = 400) =>
+    new AceTransport(async () => new Response(JSON.stringify(body), { status })).exchange({
+      origin: 'https://org.example',
+      token: 'secret',
+    });
+  await assert.rejects(
+    exchange({ error: 'invalid_scope', error_description: 'the requested scope is not allowed' }),
+    (error) =>
+      error.name === 'RuntimeScopeMissing' && error.message.includes('cdp_query_api') && error.actions?.length === 1,
+  );
+  await assert.rejects(
+    exchange({ error: 'invalid_grant', error_description: 'expired access/refresh token' }),
+    (error) =>
+      error.name === 'RuntimeAuthFailed' && error.message.includes('(invalid_grant: expired access/refresh token)'),
+  );
+});
+
+test('transport errors never expose tokens or unstructured upstream bodies and never retry', async () => {
   for (const command of ['ace memory read', 'ace memory delete']) {
     const op = operationFor(command),
       plan = planRequest(op, values, op.body ? payloads[op.body] : undefined, 'target');
@@ -290,4 +362,23 @@ test('malformed success response preserves uncertain-write recovery boundary', a
     ),
     { name: 'InvalidResponse' },
   );
+});
+
+test('agent offset continuation preserves filters and uses returned page boundaries', async () => {
+  const operation = operationFor('ace agent list');
+  const flags = { limit: 2, offset: 2, filters: '[status=ACTIVE]', 'order-by': 'DESC' };
+  const plan = planRequest(operation, flags, undefined, 'org');
+  const session = { origin: 'https://org.example', token: 'test' };
+  const execute = (data) => new AceTransport(async () => Response.json(data)).execute(plan, session, operation, flags);
+  const first = await execute({ agents: [{ name: 'a' }, { name: 'b' }], limit: 2, offset: 2, totalSize: 2 });
+  assert.deepEqual(first.continuation, { command: 'ace agent list', flags: { ...flags, offset: 4 } });
+  for (const data of [
+    { agents: [{ name: 'last' }], limit: 2, offset: 4, totalSize: 5 },
+    { agents: [], limit: 2, offset: 2, totalSize: 5 },
+    { agents: [{}], limit: 0, offset: 2, totalSize: 5 },
+    { agents: [{}], limit: 2, offset: -1, totalSize: 5 },
+    { agents: [{}], limit: 2, offset: 2, totalSize: '5' },
+    { agents: [{}], limit: 2, totalSize: 5 },
+  ])
+    assert.equal((await execute(data)).continuation, undefined);
 });

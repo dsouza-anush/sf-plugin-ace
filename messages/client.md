@@ -56,7 +56,7 @@ Session summaries are projected from the conversation API, not the session index
 Accepted by Salesforce; asynchronous completion and memory extraction are not verified.
 
 # warnings.registration
-Registration response received; use ace agent get to verify Active status. Additional graph readiness is separate.
+Registration response received; use ace agent get to verify Active status. Runtime commands for a new agent can return HTTP 400 or 404 for several minutes after it reports Active (about 1-7 minutes in testing); retry reads, and read state before retrying a failed create.
 
 # warnings.fast-mode
 Fast mode does not apply token_budget or latency_sensitivity.
@@ -78,6 +78,12 @@ Invalid --%s integer.
 
 # errors.projection-filter
 --%s is not supported with --source conversation. Use --source index.
+
+# errors.exchange-scope
+Runtime commands need a Salesforce login whose OAuth grant includes the cdp_query_api scope. The default sf org login grant does not include it, so Salesforce rejected the runtime token exchange (invalid_scope).
+
+# actions.exchange-scope
+Run sf ace setup once with an administrator org to provision a JWT login that has these scopes, then pass that alias with --target-org. Alternatively log in through an external client app that grants api, refresh_token, cdp_query_api and cdp_ingest_api, or set ACE_RUNTIME_ORIGIN and ACE_RUNTIME_TOKEN.
 
 # errors.exchange-http
 Runtime token exchange returned HTTP %s. Check OAuth scopes and tenant provisioning.

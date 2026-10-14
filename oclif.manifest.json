@@ -231,7 +231,7 @@
       "aliasPermutations": [],
       "aliases": [],
       "args": {},
-      "description": "GET /services/data/v{version}/ssot/agentic/agent/{agentId}\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "description": "GET /services/data/v{version}/ssot/agentic/agent/{agentId}\n\nReturns the Salesforce response with HTTP status.",
       "enableJsonFlag": true,
       "examples": [
         "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --json"
@@ -325,7 +325,7 @@
       "description": "GET /services/data/v{version}/ssot/agentic/agents\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org  --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --json"
       ],
       "flags": {
         "api-version": {
@@ -441,10 +441,10 @@
       "aliasPermutations": [],
       "aliases": [],
       "args": {},
-      "description": "GET /api/v1/agentic/context\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "description": "GET /api/v1/agentic/context\n\nReturns the Salesforce response with HTTP status.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --conversation-id EXAMPLE_ID --json"
       ],
       "flags": {
         "agent-id": {
@@ -602,7 +602,7 @@
       "description": "POST /api/v1/agentic/conversations/{conversationId}/close\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --dry-run --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --conversation-id EXAMPLE_ID --dry-run --json"
       ],
       "flags": {
         "agent-id": {
@@ -730,7 +730,7 @@
       "description": "POST /api/v1/agentic/conversations\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --body-file request.json --dry-run --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --body-file request.json --dry-run --json"
       ],
       "flags": {
         "agent-id": {
@@ -859,7 +859,7 @@
       "description": "GET /api/v1/agentic/conversations/{conversationId}\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --json"
       ],
       "flags": {
         "agent-id": {
@@ -1022,7 +1022,7 @@
       "description": "GET /api/v1/agentic/conversations\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type individual --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --owner-id EXAMPLE_ID --owner-type individual --json"
       ],
       "flags": {
         "agent-id": {
@@ -1180,7 +1180,7 @@
       "description": "POST /api/v1/agentic/conversations/{conversationId}/entries\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --body-file request.json --dry-run --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --conversation-id EXAMPLE_ID --body-file request.json --dry-run --json"
       ],
       "flags": {
         "agent-id": {
@@ -1317,7 +1317,7 @@
       "description": "POST /api/v1/agentic/memory\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --body-file request.json --dry-run --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category VERIFIED_CATEGORY --body-file request.json --dry-run --json"
       ],
       "flags": {
         "agent-id": {
@@ -1474,7 +1474,7 @@
       "description": "DELETE /api/v1/agentic/memory\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --body-file request.json --dry-run --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category VERIFIED_CATEGORY --body-file request.json --dry-run --json"
       ],
       "flags": {
         "agent-id": {
@@ -1628,10 +1628,10 @@
       "aliasPermutations": [],
       "aliases": [],
       "args": {},
-      "description": "GET /api/v1/agentic/memory\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
+      "description": "GET /api/v1/agentic/memory\n\nReturns the Salesforce response with HTTP status.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category VERIFIED_CATEGORY --json"
       ],
       "flags": {
         "agent-id": {
@@ -1757,7 +1757,7 @@
       "description": "POST /api/v1/agentic/memory\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category EXAMPLE_ID --body-file request.json --dry-run --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --profile-id EXAMPLE_ID --profile-type individual --category VERIFIED_CATEGORY --body-file request.json --dry-run --json"
       ],
       "flags": {
         "agent-id": {
@@ -1914,7 +1914,7 @@
       "description": "POST /api/v1/agentic/conversations/{conversationId}/sessions/{sessionId}/participants\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --session-id EXAMPLE_ID --body-file request.json --dry-run --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --conversation-id EXAMPLE_ID --session-id EXAMPLE_ID --body-file request.json --dry-run --json"
       ],
       "flags": {
         "agent-id": {
@@ -2131,10 +2131,10 @@
       "aliasPermutations": [],
       "aliases": [],
       "args": {},
-      "description": "POST /api/v1/agentic/conversations/{conversationId}/sessions/{sessionId}/close\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.",
+      "description": "POST /api/v1/agentic/conversations/{conversationId}/sessions/{sessionId}/close\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nMemory extraction depends on agent configuration and service processing. An accepted closure request does not prove extraction completed.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --session-id EXAMPLE_ID --dry-run --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --conversation-id EXAMPLE_ID --session-id EXAMPLE_ID --dry-run --json"
       ],
       "flags": {
         "agent-id": {
@@ -2261,7 +2261,7 @@
       ],
       "state": "beta",
       "strict": true,
-      "summary": "Submit session closure and trigger memory extraction."
+      "summary": "Submit a request to close a session."
     },
     "ace:session:create": {
       "aliasPermutations": [],
@@ -2270,7 +2270,7 @@
       "description": "POST /api/v1/agentic/conversations/{conversationId}/sessions\n\nWrites default to disabled. Review --dry-run before enabling --allow-write. Interactive execution asks for confirmation; automation requires --no-prompt --confirm FINGERPRINT. Read affected state before retrying an uncertain outcome.\n\nSupply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --body-file request.json --dry-run --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --conversation-id EXAMPLE_ID --body-file request.json --dry-run --json"
       ],
       "flags": {
         "agent-id": {
@@ -2407,8 +2407,8 @@
       "description": "GET /api/v1/agentic/conversations/{conversationId}/sessions\n\nUse --source conversation to project session summaries from the governed conversation API when the session index omits closed sessions. The result identifies its source. This mode supports status and id/startTime/status field projection; time-range and participant-id filters are rejected. Missing fields remain absent.\n\nReturns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.",
       "enableJsonFlag": true,
       "examples": [
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type individual --json",
-        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type employee --source conversation --status CLOSED --json"
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type individual --json",
+        "<%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type employee --source conversation --status CLOSED --json"
       ],
       "flags": {
         "agent-id": {
@@ -2578,7 +2578,139 @@
       "state": "beta",
       "strict": true,
       "summary": "List sessions in an authorized conversation."
+    },
+    "ace:setup": {
+      "aliasPermutations": [],
+      "aliases": [],
+      "args": {},
+      "description": "Use an existing administrator login to deploy a dedicated ECA, certificate, and preauthorization permission set. Assign the permission set to the named user, save an sf JWT login, exchange the token, and verify a read against an existing ACTIVE agent. No browser is opened. The user must already have the necessary Data 360 permissions.\n\nPreview with --dry-run, then approve with --allow-write and either interactive confirmation or --no-prompt --confirm FINGERPRINT. Preview is local; it is not a Salesforce deployment validation. Existing apps must match the requested settings and local key pair; setup never rotates credentials or repairs incompatible apps automatically. The key directory is permanent: sf reads the private key on future token renewals. Re-running checks completed work and resumes without retrying an uncertain mutation automatically.",
+      "enableJsonFlag": true,
+      "examples": [
+        "Preview setup without changing local files or the org:\n<%= config.bin %> <%= command.id %> --target-org admin-org --username user@example.com --agent-id Existing_Agent --dry-run --json",
+        "Provision after reviewing the preview fingerprint:\n<%= config.bin %> <%= command.id %> --target-org admin-org --username user@example.com --agent-id Existing_Agent --allow-write --no-prompt --confirm FINGERPRINT --json"
+      ],
+      "flags": {
+        "agent-id": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "agent-id",
+          "required": true,
+          "summary": "Existing ACTIVE agent API name used for the runtime verification read.",
+          "type": "option"
+        },
+        "alias": {
+          "default": "ace",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "alias",
+          "summary": "Alias for the resulting JWT login.",
+          "type": "option"
+        },
+        "allow-write": {
+          "allowNo": false,
+          "name": "allow-write",
+          "summary": "Explicitly enable ECA deployment, permission assignment and local credential storage.",
+          "type": "boolean"
+        },
+        "app-name": {
+          "default": "ACE_CLI",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "app-name",
+          "summary": "Dedicated ECA API name; existing settings must match exactly.",
+          "type": "option"
+        },
+        "confirm": {
+          "dependsOn": [
+            "no-prompt"
+          ],
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "confirm",
+          "summary": "Exact fingerprint from the same setup arguments with --dry-run.",
+          "type": "option"
+        },
+        "contact-email": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "contact-email",
+          "summary": "ECA contact email; defaults to the username.",
+          "type": "option"
+        },
+        "dry-run": {
+          "allowNo": false,
+          "name": "dry-run",
+          "summary": "Print the local setup plan and approval fingerprint; make no network requests or writes.",
+          "type": "boolean"
+        },
+        "flags-dir": {
+          "hasDynamicHelp": false,
+          "helpGroup": "GLOBAL",
+          "multiple": false,
+          "name": "flags-dir",
+          "summary": "Import flag values from a directory.",
+          "type": "option"
+        },
+        "json": {
+          "allowNo": false,
+          "description": "Format output as json.",
+          "helpGroup": "GLOBAL",
+          "name": "json",
+          "type": "boolean"
+        },
+        "key-dir": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "key-dir",
+          "summary": "Permanent private directory containing server.key and server.crt; defaults to ~/.ace/ORG_ID/APP_NAME.",
+          "type": "option"
+        },
+        "no-prompt": {
+          "allowNo": false,
+          "name": "no-prompt",
+          "summary": "Run without prompting; requires the reviewed plan fingerprint.",
+          "type": "boolean"
+        },
+        "target-org": {
+          "char": "o",
+          "hasDynamicHelp": true,
+          "multiple": false,
+          "name": "target-org",
+          "noCacheDefault": true,
+          "required": true,
+          "summary": "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+          "type": "option"
+        },
+        "username": {
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "name": "username",
+          "required": true,
+          "summary": "Existing active Salesforce user to preauthorize and authenticate.",
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": true,
+      "hiddenAliases": [],
+      "id": "ace:setup",
+      "isESM": true,
+      "permutations": [
+        "ace:setup",
+        "setup:ace"
+      ],
+      "pluginAlias": "@anushdsouza/sf-plugin-ace",
+      "pluginName": "@anushdsouza/sf-plugin-ace",
+      "pluginType": "core",
+      "relativePath": [
+        "lib",
+        "commands",
+        "ace",
+        "setup.js"
+      ],
+      "state": "beta",
+      "strict": true,
+      "summary": "Provision and verify headless ACE authentication with a JWT external client app."
     }
   },
-  "version": "0.1.0-beta.3"
+  "version": "0.1.0-beta.4"
 }

@@ -12,9 +12,9 @@ const env = {
   ACE_RUNTIME_TOKEN: 'synthetic-runtime-token',
   SF_AUTOUPDATE_DISABLE: 'true',
 };
-function cli(args, preload) {
+function cli(args, preload, environment = {}) {
   const result = spawnSync(process.execPath, [...(preload ? ['--import', preload] : []), runner, ...args, '--json'], {
-    env,
+    env: { ...env, ...environment },
     encoding: 'utf8',
     timeout: 20000,
   });
@@ -155,6 +155,53 @@ test('actual CLI continuation preserves filters, source, target, version, and ti
       },
     });
     assert.deepEqual(result.output.result.data.sessions, [{ id: 's' }]);
+  } finally {
+    await rm(folder, { recursive: true, force: true });
+  }
+});
+
+test('actual CLI exchanges the org grant when explicit runtime credentials are absent', async () => {
+  const folder = await mkdtemp(join(tmpdir(), 'ace-cli-auth-'));
+  try {
+    const mock = join(folder, 'auth.mjs');
+    await writeFile(
+      mock,
+      `import assert from 'node:assert/strict';
+      import { Org } from ${JSON.stringify(import.meta.resolve('@salesforce/core'))};
+      Org.create = async () => ({ getOrgId: () => 'org', getUsername: () => 'user@example.test', refreshAuth: async () => {}, getConnection: () => ({instanceUrl:'https://org.example',accessToken:'org-secret'}) });
+      globalThis.fetch = async (url, init) => {
+        if (url.origin === 'https://org.example') {
+          assert.equal(url.pathname, '/services/a360/token');
+          assert.equal(init.body.get('subject_token'), 'org-secret');
+          return Response.json({access_token:'runtime-secret',instance_url:'tenant.salesforce.com'});
+        }
+        assert.equal(url.origin, 'https://tenant.salesforce.com');
+        assert.equal(init.headers.Authorization, 'Bearer runtime-secret');
+        return Response.json({conversations:[]});
+      };`,
+    );
+    const args = [
+      'ace',
+      'conversation',
+      'list',
+      '--target-org',
+      'example',
+      '--agent-id',
+      'agent',
+      '--owner-id',
+      'owner',
+      '--owner-type',
+      'employee',
+    ];
+    const result = cli(args, mock, { ACE_RUNTIME_ORIGIN: '', ACE_RUNTIME_TOKEN: '' });
+    assert.equal(result.code, 0);
+    assert.deepEqual(result.output.result.data, { conversations: [] });
+    assert(!JSON.stringify(result.output).includes('secret'));
+    for (const credentials of [
+      { ACE_RUNTIME_ORIGIN: '', ACE_RUNTIME_TOKEN: 'runtime-secret' },
+      { ACE_RUNTIME_ORIGIN: 'https://tenant.salesforce.com', ACE_RUNTIME_TOKEN: '' },
+    ])
+      assert.equal(cli(args, mock, credentials).output.name, 'RuntimeAuthRequired');
   } finally {
     await rm(folder, { recursive: true, force: true });
   }

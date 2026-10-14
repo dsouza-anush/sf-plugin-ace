@@ -9,4 +9,4 @@ Writes default to disabled. Review --dry-run before enabling --allow-write. Inte
 Supply the published JSON body using --body-file. Identifiers in flags are placed in their published header, query, or path locations.
 
 # examples
-- <%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --body-file request.json --dry-run --json
+- <%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --body-file request.json --dry-run --json

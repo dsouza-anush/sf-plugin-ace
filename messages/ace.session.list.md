@@ -9,6 +9,6 @@ Use --source conversation to project session summaries from the governed convers
 Returns the Salesforce response with HTTP status. Preserve pagination filters when following continuation.
 
 # examples
-- <%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type individual --json
+- <%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type individual --json
 
-- <%= config.bin %> <%= command.id %> --target-org my-org --agent-id EXAMPLE_ID --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type employee --source conversation --status CLOSED --json
+- <%= config.bin %> <%= command.id %> --target-org my-org --agent-id AGENT_API_NAME --conversation-id EXAMPLE_ID --owner-id EXAMPLE_ID --owner-type employee --source conversation --status CLOSED --json

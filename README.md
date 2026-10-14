@@ -1,6 +1,8 @@
 # Agent Context Engine for Salesforce CLI
 
-An independent Salesforce CLI plugin (beta). It implements the 18 published Agent Configuration and Agentic Memory & Context operations as dedicated `sf ace` commands, plus offline schema discovery. It is not a Salesforce-published or signed plugin. See the release page for distribution status and the live-verification limitations.
+Private preparation repository: `dsouza-anush/sf-plugin-ace-private`. The previously released public beta remains at `dsouza-anush/sf-plugin-ace`. See [publishing readiness](docs/PUBLISHING-READINESS.md) for account-owner steps and known release limitations.
+
+An independent Salesforce CLI plugin (beta). It implements the 18 published Agent Configuration and Agentic Memory & Context operations as dedicated `sf ace` commands, plus offline schema discovery and headless authentication setup. It is not a Salesforce-published or signed plugin. See the release page for distribution status and the live-verification limitations.
 
 ## Integration
 
@@ -16,14 +18,14 @@ Salesforce is a trademark of Salesforce, Inc. The Salesforce logo is copyright S
 
 ## Install
 
-Install from the npm beta channel:
+From the npm beta channel once published:
 
 ```bash
 sf plugins install @anushdsouza/sf-plugin-ace@beta
 sf ace --help
 ```
 
-For a GitHub Release tarball, use `sf plugins install "file:$PWD/anushdsouza-sf-plugin-ace-0.1.0-beta.3.tgz"`. To remove the installed plugin, use `sf plugins uninstall @anushdsouza/sf-plugin-ace`. Install a pinned version to roll back.
+For a GitHub Release tarball, use `sf plugins install "file:$PWD/anushdsouza-sf-plugin-ace-0.1.0-beta.2.tgz"`. To remove the installed plugin, use `sf plugins uninstall @anushdsouza/sf-plugin-ace`. Install a pinned version to roll back.
 
 ## Install from source
 
@@ -47,6 +49,10 @@ Configuration commands use Salesforce CLI org authentication through `@salesforc
 
 Runtime commands either exchange that org's existing grant at the published `/services/a360/token` endpoint, or use the explicit pair `ACE_RUNTIME_ORIGIN` and `ACE_RUNTIME_TOKEN`. `--runtime-origin` overrides the origin environment variable. Supply tokens through an approved secret manager/environment, never as a command-line argument or committed file. Partial explicit configuration fails closed. The automatic exchange uses Salesforce's returned tenant origin, restricted to an HTTPS Salesforce domain, and keeps the token only in process memory.
 
+The exchange requires the org grant to include the `cdp_query_api` OAuth scope (and `cdp_ingest_api` for runtime writes). The default `sf org login web` grant has only `api refresh_token web`, so runtime commands fail with `RuntimeScopeMissing` (Salesforce `invalid_scope`) until you authenticate through an external client app with those scopes. [Headless setup](#headless-setup) provisions one with `sf ace setup`.
+
+The four `ace agent` commands use the standard REST API and work with the default grant.
+
 A successful exchange is not proof of ACE permissions or end-user identity. Owner/profile flags select records; they do not impersonate a user or mint a JWT. External-customer identity provisioning still requires a separately supported identity flow. See [coverage and gaps](docs/API-COVERAGE.md).
 
 ## Read, inspect, and paginate
@@ -62,7 +68,31 @@ sf ace context get --target-org my-org \
 
 Every command supports `--json` using Salesforce's normal `{status,result,warnings}` success envelope and nonzero error exits. `result` preserves `httpStatus`, `state`, upstream JSON in `data` (or explicitly identified session summaries with `--source conversation`), and wrapper warnings. Success means a response was received; it is not a workflow-completion claim. A 202 is explicitly `state: accepted`.
 
-The three paginated conversation reads include `result.continuation` with the next command and the original filters, scope, target org, and cursor. Repeat that request while `nextPageToken` is nonempty. Each invocation reads one page; there is no unbounded auto-pagination. Agent lists expose the published `--limit`, `--offset`, `--filters`, and `--order-by` parameters. Memory pagination is not invented.
+The three paginated conversation reads include `result.continuation` with the next command and the original filters, scope, target org, and cursor. Repeat that request while `nextPageToken` is nonempty. Each invocation reads one page; there is no unbounded auto-pagination. Agent lists also return `result.continuation` after a full page, preserving filters and advancing `--offset` by the returned record count. A final full page can lead to an empty next page. Do not treat `totalSize` as the complete collection size: the verified service reports the current page count. Agent lists expose the published `--limit`, `--offset`, `--filters`, and `--order-by` parameters; the verified org rejects explicit ordering, so omit `--order-by` there. Memory pagination is not invented.
+
+## Headless setup
+
+`sf ace setup` provisions JWT authentication using an existing administrator org login. It creates a dedicated ECA with `Api`, `RefreshToken`, `CDPQuery`, and `CDPIngest`, a certificate, and a permission set that preauthorizes only assigned users. It assigns that permission set, runs `sf org login jwt`, and verifies the Data 360 exchange with a conversation read. No browser or consumer-secret entry is needed. The intended user must already have the required Data 360 permissions and an existing ACTIVE agent must be available.
+
+```bash
+sf ace setup --target-org admin-org --username user@example.com \
+  --agent-id Existing_Agent --alias ace --dry-run --json
+
+# Use the exact fingerprint returned above, keeping all setup arguments the same.
+sf ace setup --target-org admin-org --username user@example.com \
+  --agent-id Existing_Agent --alias ace \
+  --allow-write --no-prompt --confirm FINGERPRINT --json
+```
+
+`--dry-run` is a local plan, not a Salesforce deployment validation. Without `--no-prompt`, `--allow-write` prompts for confirmation. Setup creates permanent security configuration; existing sf aliases for the same username are kept and use the resulting JWT login. No default org is changed.
+
+Keys default to `~/.ace/ORG_ID/APP_NAME/server.key` and `server.crt`; override with `--key-dir`. OpenSSL must be installed to generate a new RSA key pair. Setup refuses unsafe permissions, symlinks, incomplete pairs, expired certificates and mismatches. Never commit or delete the private key while the login is in use: Salesforce CLI needs it for token renewal. Certificates generated by setup expire after one year; renewal is an explicit administrator task, not an automatic credential rotation.
+
+The result and private `setup.json` receipt include a ready-to-use `sf org login jwt` command for CI, the consumer key (client ID), deployment ID when created, and runtime check status. Store the private key in your CI secret store and adjust its path when running elsewhere. No access tokens, refresh tokens or private-key bytes are printed. JWT bearer authentication is distinct from issuing JWT-formatted Salesforce access tokens; the latter remains disabled for Data 360 exchange compatibility.
+
+Use a dedicated `--app-name` (default `ACE_CLI`). An existing app is reused only if its certificate, scopes and preauthorization policies match. Existing keys must be in the selected directory with the standard filenames. Setup does not repair incompatible apps, broaden existing permission sets, rotate credentials or retry uncertain writes. After an interrupted run, inspect the reported deployment and rerun the same command to check completed steps. Newly deployed apps can take time to become usable; a failed JWT login or verification does not erase the created app or local keys.
+
+Setup verification proves one employee conversation read. It does not claim that every runtime operation, a new agent's readiness, or external-customer identity flows are verified.
 
 ## Review and execute writes
 

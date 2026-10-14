@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { Messages, SfError, type Org } from '@salesforce/core';
 import { Flags, SfCommand } from '@salesforce/sf-plugins-core';
 import type { Interfaces } from '@oclif/core';
-import { operationFor, type Operation } from './contracts.js';
+import { DEFAULT_API_VERSION, operationFor, type Operation } from './contracts.js';
 import {
   AceTransport,
   origin,
@@ -79,7 +79,7 @@ export abstract class AceCommand extends SfCommand<Result | { state: 'planned'; 
     const { flags } = await this.parse(this.constructor as typeof AceCommand);
     const operation: Operation = operationFor(command);
     const org = flags['target-org'] as Org | undefined;
-    const apiVersion = (flags['api-version'] as string | undefined) ?? '68.0';
+    const apiVersion = (flags['api-version'] as string | undefined) ?? DEFAULT_API_VERSION;
     const explicitOrigin = flags['runtime-origin'] as string | undefined;
     const explicitToken = process.env.ACE_RUNTIME_TOKEN;
     if (operation.surface === 'runtime' && Boolean(explicitOrigin) !== Boolean(explicitToken))

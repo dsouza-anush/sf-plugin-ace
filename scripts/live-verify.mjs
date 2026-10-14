@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { operations } from '../lib/contracts.js';
 
 const org = process.env.ACE_LIVE_ORG;
 const owner = process.env.ACE_LIVE_OWNER;
@@ -32,6 +33,20 @@ const conv = [...base, '--conversation-id', conversation];
 const sess = [...conv, '--session-id', session];
 const own = ['--owner-id', owner, '--owner-type', 'employee'];
 const profile = [...common, '--profile-id', owner, '--profile-type', 'employee', '--category', 'sys_PROFILE_FACT'];
+const expectedCommands = [...operations.map((operation) => operation.command), 'ace schema'];
+const expectedAssertions = [
+  'messagePersisted',
+  'sessionEnumerated',
+  'contextAssembled',
+  'memoryCreated',
+  'memoryUpdated',
+  'memoryDeleted',
+  'conversationClosed',
+  'sessionClosed',
+  'closedSessionEnumerated',
+  'conversationEnumerated',
+  'agentDeleted',
+];
 const persist = () => writeFileSync(reportPath, JSON.stringify(report, null, 2) + '\n', { mode: 0o600 });
 function run(command, flags = [], body, execute = false) {
   const args = [...command.split(' '), ...flags, '--json'];
@@ -190,6 +205,24 @@ try {
   assert(memoryId, 'No memory ID returned');
   report.retained.memoryId = memoryId;
   persist();
+  const memoryCreated = await poll(
+    'ace memory read',
+    profile,
+    (data) =>
+      data?.memories?.some(
+        (item) => item.memoryId === memoryId && item.content === `CLI acceptance ${id}; operator verification only.`,
+      ) === true,
+  );
+  report.assertions.memoryCreated =
+    memoryCreated.status === 0 &&
+    memoryCreated.result?.data?.memories?.some(
+      (item) => item.memoryId === memoryId && item.content === `CLI acceptance ${id}; operator verification only.`,
+    ) === true;
+  persist();
+  assert(
+    report.assertions.memoryCreated,
+    'Created memory was not read back; inspect retained memory before continuing.',
+  );
   const updated = success(
     run(
       'ace memory update',
@@ -249,10 +282,8 @@ try {
   process.exitCode = 1;
 } finally {
   report.finishedAt = new Date().toISOString();
-  report.allCommandsSuccessful =
-    Object.keys(report.commands).length === 19 && Object.values(report.commands).every((r) => r.exitStatus === 0);
-  report.allAssertionsPassed =
-    Object.keys(report.assertions).length === 10 && Object.values(report.assertions).every(Boolean);
+  report.allCommandsSuccessful = expectedCommands.every((command) => report.commands[command]?.exitStatus === 0);
+  report.allAssertionsPassed = expectedAssertions.every((assertion) => report.assertions[assertion] === true);
   persist();
   if (!report.allCommandsSuccessful || !report.allAssertionsPassed) process.exitCode = 1;
   // Preserve receipts and uncertain resource identifiers; never silently clean up an uncertain write.

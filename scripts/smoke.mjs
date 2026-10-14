@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { operations } from '../lib/contracts.js';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const runner = join(root, 'bin/run.js');
-for (const command of [...operations.map((op) => op.command), 'ace schema']) {
+for (const command of [...operations.map((op) => op.command), 'ace schema', 'ace setup']) {
   const output = execFileSync(process.execPath, [runner, ...command.split(' '), '--help'], {
     encoding: 'utf8',
     timeout: 20000,
@@ -22,7 +22,7 @@ try {
   );
   const files = packed[0].files.map((file) => file.path);
   assert(files.includes('bin/run.js'));
-  assert.equal(files.filter((path) => /^lib\/commands\/.*\.js$/.test(path)).length, 19);
+  assert.equal(files.filter((path) => /^lib\/commands\/.*\.js$/.test(path)).length, 20);
   assert(!files.some((path) => /node_modules|\.env|\.runtime|evidence|test\//.test(path)));
   execFileSync('tar', ['-xzf', join(temp, packed[0].filename), '-C', temp]);
   // An actual clean dependency install verifies the packed plugin is self-contained.
@@ -46,7 +46,7 @@ try {
   assert(!files.some((path) => /CP-VERIFICATION|COFFEE-CONCIERGE|VERIFICATION\.json/.test(path)));
   assert.equal(pkg.publishConfig.access, 'public');
   console.log(
-    JSON.stringify({ commands: 19, help: 'passed', package: 'clean-install-and-execution-passed', liveRequests: 0 }),
+    JSON.stringify({ commands: 20, help: 'passed', package: 'clean-install-and-execution-passed', liveRequests: 0 }),
   );
 } finally {
   rmSync(temp, { recursive: true, force: true });

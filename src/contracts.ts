@@ -34,6 +34,7 @@ export const bodies = {
       dataSpaceName: id.optional(),
       configuration: z
         .object({
+          isMemoryGenerationEnabled: z.boolean().optional(),
           profileDmos: z.array(z.object({ name: id }).strict()).optional(),
           contextDataSources: z
             .object({ dataGraphs: z.array(z.object({ name: id }).strict()) })
@@ -86,6 +87,8 @@ export const bodies = {
   memoryDelete: z.object({ memories: z.array(z.object({ memoryId: id }).strict()).min(1) }).strict(),
 };
 
+export const DEFAULT_API_VERSION = '68.0';
+
 export type Parameter = {
   name: string;
   location: 'path' | 'query' | 'header';
@@ -98,13 +101,14 @@ export type Parameter = {
 };
 export type Operation = {
   command: string;
-  summary: string;
   surface: 'configuration' | 'runtime';
   method: 'GET' | 'POST' | 'DELETE';
   path: string;
   parameters: Parameter[];
   body?: keyof typeof bodies;
   paginated?: boolean;
+  /** Message key in client.md for a caveat attached to every result of this operation. */
+  warning?: string;
 };
 const param = (name: string, location: Parameter['location'], wire: string, required = false): Parameter => ({
   name,
@@ -135,10 +139,10 @@ const profile: Parameter[] = [
 export const operations: Operation[] = [
   {
     command: 'ace agent list',
-    summary: 'List ACE agent registrations.',
     surface: 'configuration',
     method: 'GET',
     path: '/agents',
+    paginated: true,
     parameters: [
       { ...param('limit', 'query', 'limit'), kind: 'integer', min: 1, max: 200 },
       { ...param('offset', 'query', 'offset'), kind: 'integer', min: 0 },
@@ -148,7 +152,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace agent get',
-    summary: 'Get an ACE agent registration by ID or API name.',
     surface: 'configuration',
     method: 'GET',
     path: '/agent/{agentId}',
@@ -156,16 +159,15 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace agent create',
-    summary: 'Register an ACE agent using a reviewed configuration file.',
     surface: 'configuration',
     method: 'POST',
     path: '/agent',
     parameters: [],
     body: 'agent',
+    warning: 'warnings.registration',
   },
   {
     command: 'ace agent delete',
-    summary: 'Irreversibly delete an ACE agent and its associated data.',
     surface: 'configuration',
     method: 'DELETE',
     path: '/agent/{agentId}',
@@ -173,7 +175,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace conversation list',
-    summary: 'List conversations for an authorized owner.',
     surface: 'runtime',
     method: 'GET',
     path: '/conversations',
@@ -182,7 +183,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace conversation get',
-    summary: 'Retrieve a conversation data graph.',
     surface: 'runtime',
     method: 'GET',
     path: '/conversations/{conversationId}',
@@ -199,7 +199,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace conversation create',
-    summary: 'Create a conversation for an authorized owner.',
     surface: 'runtime',
     method: 'POST',
     path: '/conversations',
@@ -208,7 +207,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace conversation close',
-    summary: 'Submit a request to close a conversation.',
     surface: 'runtime',
     method: 'POST',
     path: '/conversations/{conversationId}/close',
@@ -216,7 +214,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace session list',
-    summary: 'List sessions in an authorized conversation.',
     surface: 'runtime',
     method: 'GET',
     path: '/conversations/{conversationId}/sessions',
@@ -225,7 +222,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace session create',
-    summary: 'Create a conversation session with participants.',
     surface: 'runtime',
     method: 'POST',
     path: '/conversations/{conversationId}/sessions',
@@ -234,7 +230,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace session close',
-    summary: 'Submit session closure and trigger memory extraction.',
     surface: 'runtime',
     method: 'POST',
     path: '/conversations/{conversationId}/sessions/{sessionId}/close',
@@ -242,7 +237,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace participant add',
-    summary: 'Add participants to a conversation session.',
     surface: 'runtime',
     method: 'POST',
     path: '/conversations/{conversationId}/sessions/{sessionId}/participants',
@@ -251,7 +245,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace entry add',
-    summary: 'Add messages, traces, or entries to a conversation.',
     surface: 'runtime',
     method: 'POST',
     path: '/conversations/{conversationId}/entries',
@@ -260,7 +253,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace memory read',
-    summary: 'Read memories in an explicitly selected profile category.',
     surface: 'runtime',
     method: 'GET',
     path: '/memory',
@@ -268,7 +260,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace memory create',
-    summary: 'Create memories for an authorized profile.',
     surface: 'runtime',
     method: 'POST',
     path: '/memory',
@@ -277,16 +268,15 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace memory update',
-    summary: 'Replace memories and return their new identifiers.',
     surface: 'runtime',
     method: 'POST',
     path: '/memory',
     parameters: profile,
     body: 'memoryUpdate',
+    warning: 'warnings.memory-update',
   },
   {
     command: 'ace memory delete',
-    summary: 'Delete explicitly selected memories.',
     surface: 'runtime',
     method: 'DELETE',
     path: '/memory',
@@ -295,7 +285,6 @@ export const operations: Operation[] = [
   },
   {
     command: 'ace context get',
-    summary: 'Retrieve assembled ACE context in fast mode.',
     surface: 'runtime',
     method: 'GET',
     path: '/context',
@@ -307,6 +296,7 @@ export const operations: Operation[] = [
       { ...param('latency-sensitivity', 'query', 'latency_sensitivity'), options: ['low', 'medium', 'high'] },
       { ...param('token-budget', 'query', 'token_budget'), kind: 'integer', min: 1 },
     ],
+    warning: 'warnings.fast-mode',
   },
 ];
 
